@@ -1,17 +1,14 @@
 import 'package:epic/components/custom_button.dart';
 import 'package:epic/components/custom_text.dart';
 import 'package:epic/consts/colors.dart';
-import 'package:epic/consts/const.dart';
 import 'package:epic/user/providers/appointmentService_provider.dart';
 import 'package:epic/user/views/screens/bottom_nav_bar_client_screen/bottom_nav_bar_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-import 'dart:developer';
 
 class ConfirmAppointmentScreen extends ConsumerWidget {
   final String barberId;
@@ -35,8 +32,7 @@ class ConfirmAppointmentScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // log('$barberId $serviceId');
-    // log('$appointmentDate, $appointmentTime');
+    double screenWidth = MediaQuery.of(context).size.width;
 
     ref.listen<AsyncValue<bool>>(appointmentBookingProvider, (previous, next) {
       if (next.isLoading) {
@@ -75,14 +71,14 @@ class ConfirmAppointmentScreen extends ConsumerWidget {
         title: customTextOne(
           text: 'Confirm appointment',
           fontweight: FontWeight.normal,
-          fontsize: 16.sp,
+          fontsize: screenWidth > 360 ? 16 : 12,
           textcolor: black,
         ),
         backgroundColor: background, // Makes AppBar background transparent
         elevation: 0, // Removes the AppBar shadow
       ),
       body: Padding(
-        padding: EdgeInsets.only(left: 5.w, right: 5.w, bottom: 5.h, top: 6.h),
+        padding: EdgeInsets.only(left: 14, right: 14, bottom: 14, top: 10),
         child: Column(
           children: [
             _buildExpertDetailsSection(context, ref),
@@ -93,6 +89,7 @@ class ConfirmAppointmentScreen extends ConsumerWidget {
   }
 
   Widget _buildExpertDetailsSection(BuildContext context, WidgetRef ref) {
+    double screenWidth = MediaQuery.of(context).size.width;
     String getOrdinalSuffix(int day) {
       if (day >= 11 && day <= 13) return '${day}th';
       switch (day % 10) {
@@ -128,7 +125,7 @@ class ConfirmAppointmentScreen extends ConsumerWidget {
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 30.sp, horizontal: 20.sp),
+        padding: EdgeInsets.symmetric(vertical: 40, horizontal: 20),
         child: Column(
           children: [
             Stack(
@@ -137,16 +134,15 @@ class ConfirmAppointmentScreen extends ConsumerWidget {
                 CircleAvatar(
                   backgroundImage: NetworkImage(barberImage),
                   backgroundColor: Colors.transparent,
-                  radius: 33.sp, // Adjust the size of the avatar
+                  radius: screenWidth > 360 ? 45 : 40,
                 ),
 
                 // Light black background overlay
                 Positioned.fill(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.black
-                          .withOpacity(0.2), // Semi-transparent black
-                      shape: BoxShape.circle, // Ensures the overlay is circular
+                      color: Colors.black.withOpacity(0.2),
+                      shape: BoxShape.circle,
                     ),
                   ),
                 ),
@@ -155,49 +151,49 @@ class ConfirmAppointmentScreen extends ConsumerWidget {
                 Positioned.fill(
                   child: Align(
                     alignment: Alignment.center,
-                    child:
-                        customText(barberName, FontWeight.normal, 15.sp, white),
+                    child: customText(barberName, FontWeight.normal,
+                        screenWidth > 360 ? 15 : 10, white),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 10.sp),
+            SizedBox(height: 10),
             Text(
               barberName,
               style: TextStyle(
                 color: white,
                 fontWeight: FontWeight.w700,
-                fontSize: 18.sp,
+                fontSize: screenWidth > 360 ? 18 : 14,
               ),
             ),
-            SizedBox(height: 10.sp),
+            SizedBox(height: 10),
             Text(
               serviceName,
               style: TextStyle(
                 color: white,
                 fontWeight: FontWeight.w700,
-                fontSize: 18.sp,
+                fontSize: screenWidth > 360 ? 18 : 14,
               ),
             ),
-            SizedBox(height: 20.sp),
+            SizedBox(height: 20),
             Text(
               'Date : $formattedDate',
               style: TextStyle(
                 color: white,
                 fontWeight: FontWeight.w700,
-                fontSize: 18.sp,
+                fontSize: screenWidth > 360 ? 18 : 14,
               ),
             ),
-            SizedBox(height: 6.sp),
+            SizedBox(height: 8),
             Text(
               'Time : $appointmentTime ',
               style: TextStyle(
                 color: white,
                 fontWeight: FontWeight.w700,
-                fontSize: 18.sp,
+                fontSize: screenWidth > 360 ? 18 : 14,
               ),
             ),
-            SizedBox(height: 16.sp),
+            SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: SizedBox(
@@ -207,7 +203,7 @@ class ConfirmAppointmentScreen extends ConsumerWidget {
                   ontap: () => _confirmBooking(ref),
                   backgroundcolor: blue,
                   text: 'Confirm',
-                  fontsize: 16.sp,
+                  fontsize: screenWidth > 360 ? 16 : 12,
                   radius: 12,
                   borderwidth: 1,
                   textcolor: white,

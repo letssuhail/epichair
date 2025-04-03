@@ -17,7 +17,7 @@ class BarberListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Watch the barberListProvider with the current serviceId
+    double screenWidth = MediaQuery.of(context).size.width;
     final barberListAsync = ref.watch(barberListProvider(serviceName));
 
     return Scaffold(
@@ -49,14 +49,14 @@ class BarberListScreen extends ConsumerWidget {
                       style: TextStyle(
                         color: newGrey,
                         fontWeight: FontWeight.bold,
-                        fontSize: 22.sp,
+                        fontSize: screenWidth > 360 ? 20 : 16,
                       ),
                     ),
-                  SizedBox(height: index == 0 ? 20.sp : 10.sp),
+                  SizedBox(height: index == 0 ? 20 : 10),
                   Container(
-                    padding: EdgeInsets.symmetric(vertical: 10.sp),
-                    margin:
-                        EdgeInsets.symmetric(horizontal: 15.sp, vertical: 5.sp),
+                    padding: EdgeInsets.symmetric(
+                        vertical: screenWidth > 360 ? 5 : 2),
+                    margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: newGrey),
@@ -70,13 +70,12 @@ class BarberListScreen extends ConsumerWidget {
                       title: Text(
                         barber['name']!,
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: screenWidth > 360 ? 20 : 14,
                           color: black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       onTap: () {
-                        // Navigate to Book Appointment Screen with selected barber
                         Navigator.push(
                           context,
                           MaterialPageRoute(

@@ -77,6 +77,7 @@ class _OtpVerificationSignupScreenState
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: black,
         body: Stack(
@@ -91,18 +92,18 @@ class _OtpVerificationSignupScreenState
             ),
             Center(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5.4.h),
+                padding: EdgeInsets.symmetric(horizontal: 35),
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       _buildLogo(),
-                      SizedBox(height: 3.h),
+                      SizedBox(height: 8),
                       _buildTitle(),
-                      SizedBox(height: 4.h),
+                      SizedBox(height: 15),
                       _buildPinField(
                           email: widget.email, otpController: otpController),
-                      SizedBox(height: 4.h),
+                      SizedBox(height: 15),
                       Container(
                           padding: EdgeInsets.symmetric(horizontal: 2.h),
                           height: 54,
@@ -124,7 +125,7 @@ class _OtpVerificationSignupScreenState
                                   : customTextWithAlignment(
                                       text: 'Submmit',
                                       fontweight: FontWeight.w700,
-                                      fontsize: 20,
+                                      fontsize: screenWidth > 360 ? 16 : 12,
                                       textcolor: white,
                                       textalign: TextAlign.center))),
                     ],
@@ -144,10 +145,11 @@ class _OtpVerificationSignupScreenState
   }
 
   Widget _buildTitle() {
+    double screenWidth = MediaQuery.of(context).size.width;
     return customTextWithAlignment(
       text: 'Otp Verification',
       fontweight: FontWeight.w700,
-      fontsize: 40,
+      fontsize: screenWidth > 360 ? 30 : 25,
       textcolor: white,
       textalign: TextAlign.center,
     );

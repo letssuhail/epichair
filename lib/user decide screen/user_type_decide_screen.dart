@@ -14,6 +14,7 @@ class UserTypeDecideScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: black,
         body: Stack(
@@ -53,12 +54,12 @@ class UserTypeDecideScreen extends StatelessWidget {
                     customTextOne(
                         text: 'Welcome',
                         fontweight: FontWeight.bold,
-                        fontsize: 30.sp,
+                        fontsize: screenWidth > 360 ? 36 : 26,
                         textcolor: white),
                     customTextOne(
                         text: 'Choose your role to begin.',
                         fontweight: FontWeight.bold,
-                        fontsize: 18.sp,
+                        fontsize: screenWidth > 360 ? 20 : 14,
                         textcolor: white),
 
                     // Log in button
@@ -77,14 +78,14 @@ class UserTypeDecideScreen extends StatelessWidget {
                                   },
                                   backgroundcolor: black,
                                   text: 'Client',
-                                  fontsize: 16.sp,
+                                  fontsize: screenWidth > 360 ? 16 : 12,
                                   radius: 26,
                                   textcolor: white,
                                   fontWeight: FontWeight.normal),
                             ),
                           ),
                           SizedBox(
-                            width: 10.sp,
+                            width: 10,
                           ),
                           Expanded(
                             child: SizedBox(
@@ -96,55 +97,12 @@ class UserTypeDecideScreen extends StatelessWidget {
                                   },
                                   backgroundcolor: black,
                                   text: 'Staff',
-                                  fontsize: 16.sp,
+                                  fontsize: screenWidth > 360 ? 16 : 12,
                                   radius: 26,
                                   textcolor: white,
                                   fontWeight: FontWeight.normal),
                             ),
                           ),
-                          // InkWell(
-                          //   onTap: () {
-                          //     pushScreenTo(context, const LoginScreen());
-                          //   },
-                          //   child: SizedBox(
-                          //     width: 115,
-                          //     child: Card(
-                          //       shape: RoundedRectangleBorder(
-                          //         borderRadius: BorderRadius.circular(8),
-                          //       ),
-                          //       child: Padding(
-                          //         padding: const EdgeInsets.symmetric(
-                          //             horizontal: 26, vertical: 10),
-                          //         child: SvgPicture.asset(
-                          //           'assets/icons/client.svg',
-                          //           color: newGrey,
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   ),
-                          // ),
-
-                          // InkWell(
-                          //   onTap: () {
-                          //     pushScreenTo(context, const StaffLoginScreen());
-                          //   },
-                          //   child: SizedBox(
-                          //     width: 115,
-                          //     child: Card(
-                          //       shape: RoundedRectangleBorder(
-                          //         borderRadius: BorderRadius.circular(8),
-                          //       ),
-                          //       child: Padding(
-                          //         padding: const EdgeInsets.symmetric(
-                          //             horizontal: 26, vertical: 10),
-                          //         child: SvgPicture.asset(
-                          //           'assets/icons/staff.svg',
-                          //           color: newGrey,
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   ),
-                          // ),
                         ],
                       ),
                     ),

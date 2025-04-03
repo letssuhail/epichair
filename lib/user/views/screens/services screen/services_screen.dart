@@ -11,21 +11,19 @@ class ServicesScreen extends ConsumerWidget {
   const ServicesScreen({super.key});
 
   Future<void> _refreshServices(WidgetRef ref) async {
-    // Trigger a refresh by calling the notifier method that fetches services
     ref.refresh(serviceProvider);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final servicesAsyncValue =
-        ref.watch(serviceProvider); // Watch the serviceProvider
+    double screenWidth = MediaQuery.of(context).size.width;
+    final servicesAsyncValue = ref.watch(serviceProvider);
 
     return Scaffold(
       backgroundColor: background,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.only(
-              left: 10.0, right: 10.0, top: 20.0), // Use pixels for padding
+          padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 20.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -34,13 +32,13 @@ class ServicesScreen extends ConsumerWidget {
                 style: TextStyle(
                   color: newGrey,
                   fontWeight: FontWeight.bold,
-                  fontSize: 20.sp,
+                  fontSize: screenWidth > 360 ? 20 : 14,
                   decoration: TextDecoration.underline,
                   decorationColor: newGrey,
                   decorationThickness: 2,
                 ),
               ),
-              SizedBox(height: 20.sp),
+              SizedBox(height: 20),
 
               // Add RefreshIndicator to allow pull-to-refresh functionality
               Expanded(
@@ -126,12 +124,11 @@ class NewHaircutWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return InkWell(
       onTap: () {
-        // Update the selected service
-        ref.read(selectedServiceProvider.notifier).state =
-            label; // Set serviceId
-        // Navigate to the barber list screen with the correct serviceId
+        ref.read(selectedServiceProvider.notifier).state = label;
+
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -151,8 +148,7 @@ class NewHaircutWidget extends ConsumerWidget {
         elevation: 4,
         child: Container(
           width: 100,
-          padding: const EdgeInsets.all(10), // Padding inside the container
-
+          padding: const EdgeInsets.all(10),
           child: Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -162,20 +158,20 @@ class NewHaircutWidget extends ConsumerWidget {
                   pathh,
                   color: blue,
                 ),
-                const SizedBox(height: 10), // Spacing between icon and text
+                const SizedBox(height: 10),
                 Text(
                   label,
                   style: TextStyle(
-                    fontSize: 13,
-                    color: newGrey, // Text color
+                    fontSize: screenWidth > 360 ? 13 : 11,
+                    color: newGrey,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 5), // Spacing between icon and text
+                const SizedBox(height: 5),
                 Text(
                   '₹$price.00',
                   style: TextStyle(
-                    fontSize: 13,
+                    fontSize: screenWidth > 360 ? 13 : 11,
                     color: black, // Text color
                     fontWeight: FontWeight.bold,
                   ),

@@ -14,33 +14,30 @@ class BottomNavBarClient extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    double screenWidth = MediaQuery.of(context).size.width;
     // Get the current selected index
     final selectedIndex = ref.watch(bottomNavIndexProvider);
 
     // Define a list of screens to display based on the selected index
     final List<Widget> screens = [
-      const HomeScreen(), // Screen at index 0
+      const HomeScreen(),
       const ServicesScreen(),
-      const MyAppointmentsScreen(), // Calendar Screen (placeholder)
+      const MyAppointmentsScreen(),
       const ProfileScreen(
         isHomeScreen: false,
       ), // Screen at index 3
     ];
 
     return Scaffold(
-      // Set background color to transparent to avoid the white background issue
       backgroundColor: background,
-
-      // Display the selected screen in the body based on the selected index
       body: screens[selectedIndex],
 
       // Bottom Navigation Bar
       bottomNavigationBar: BottomAppBar(
-        // shape: const CircularNotchedRectangle(),
-        color: background, // Set BottomAppBar background to transparent
+        color: background,
         child: Container(
           height: 60.0,
-          width: double.infinity, // Ensure the bottom bar takes full width
+          width: double.infinity,
           decoration: BoxDecoration(
             gradient: const LinearGradient(colors: [
               Color(0xffE7331A),
@@ -61,7 +58,7 @@ class BottomNavBarClient extends ConsumerWidget {
                   ref.read(bottomNavIndexProvider.notifier).state = 0;
                 },
               ),
-              const SizedBox(width: 40),
+              SizedBox(width: screenWidth > 360 ? 40 : 20),
               IconButton(
                 icon: Image.asset(
                   'assets/icons/Services3.png',
@@ -72,7 +69,7 @@ class BottomNavBarClient extends ConsumerWidget {
                   ref.read(bottomNavIndexProvider.notifier).state = 1;
                 },
               ),
-              const SizedBox(width: 40),
+              SizedBox(width: screenWidth > 360 ? 40 : 20),
               IconButton(
                 icon: const Icon(
                   Icons.calendar_month,
@@ -83,8 +80,7 @@ class BottomNavBarClient extends ConsumerWidget {
                   ref.read(bottomNavIndexProvider.notifier).state = 2;
                 },
               ),
-
-              const SizedBox(width: 40), // Space in the middle for the FAB
+              SizedBox(width: screenWidth > 360 ? 40 : 20),
               IconButton(
                 icon: const Icon(
                   Icons.person,

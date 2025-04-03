@@ -16,7 +16,7 @@ class MyAppointmentsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    log('re build');
+    double screenWidth = MediaQuery.of(context).size.width;
     return DefaultTabController(
       length: 4,
       child: Scaffold(
@@ -27,7 +27,7 @@ class MyAppointmentsScreen extends ConsumerWidget {
           title: customTextOne(
             text: 'My bookings',
             fontweight: FontWeight.normal,
-            fontsize: 16.sp,
+            fontsize: screenWidth > 360 ? 16 : 12,
             textcolor: black,
           ),
           backgroundColor: background, // Makes AppBar background transparent
@@ -59,7 +59,7 @@ class MyAppointmentsScreen extends ConsumerWidget {
           },
         ),
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.sp),
+          padding: EdgeInsets.symmetric(horizontal: 14),
           child: Column(
             children: [
               TabBar(
@@ -73,22 +73,26 @@ class MyAppointmentsScreen extends ConsumerWidget {
                     Text(
                       'Ongoing',
                       style: TextStyle(
-                          fontWeight: FontWeight.w700, fontSize: 14.sp),
+                          fontWeight: FontWeight.w700,
+                          fontSize: screenWidth > 360 ? 12 : 8),
                     ),
                     Text(
                       'Confirmed',
                       style: TextStyle(
-                          fontWeight: FontWeight.w700, fontSize: 14.sp),
+                          fontWeight: FontWeight.w700,
+                          fontSize: screenWidth > 360 ? 12 : 8),
                     ),
                     Text(
                       'Past',
                       style: TextStyle(
-                          fontWeight: FontWeight.w700, fontSize: 14.sp),
+                          fontWeight: FontWeight.w700,
+                          fontSize: screenWidth > 360 ? 12 : 8),
                     ),
                     Text(
                       'Cancelled',
                       style: TextStyle(
-                          fontWeight: FontWeight.w700, fontSize: 14.sp),
+                          fontWeight: FontWeight.w700,
+                          fontSize: screenWidth > 360 ? 12 : 8),
                     ),
                   ]),
               const Flexible(
@@ -106,14 +110,15 @@ class MyAppointmentsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildTopSection() {
+  Widget _buildTopSection(context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         customTextOne(
             text: 'My appointments',
             fontweight: FontWeight.w700,
-            fontsize: 22.sp,
+            fontsize: screenWidth > 360 ? 18 : 14,
             textcolor: newGrey),
       ],
     );

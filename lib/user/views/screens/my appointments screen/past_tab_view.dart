@@ -16,6 +16,7 @@ class PastTabView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    double screenWidth = MediaQuery.of(context).size.width;
     final appointmentsAsync = ref.watch(appointmentsProvider);
 
     return appointmentsAsync.when(
@@ -70,8 +71,7 @@ class PastTabView extends ConsumerWidget {
                         child: BackdropFilter(
                           filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
                           child: Container(
-                            color: Colors.black.withOpacity(
-                                0.1), // Adjust the opacity as needed
+                            color: Colors.black.withOpacity(0.1),
                           ),
                         ),
                       ),
@@ -88,7 +88,7 @@ class PastTabView extends ConsumerWidget {
                               children: [
                                 CircleAvatar(
                                   backgroundColor: Colors.grey,
-                                  radius: 24.sp,
+                                  radius: screenWidth > 360 ? 35 : 30,
                                   backgroundImage: NetworkImage(
                                     appointment['barber']?['image_url'] ??
                                         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9nHrLn6HQN45iNAfQ2DXKp5nTyosP_2xxR8JDlZNwqgqfHnAjJys4oGh6_PWxP0RbtbY&usqp=CAU',
@@ -100,7 +100,7 @@ class PastTabView extends ConsumerWidget {
                                     customTextOne(
                                       text: appointment['service']['name'],
                                       fontweight: FontWeight.w700,
-                                      fontsize: 18.sp,
+                                      fontsize: screenWidth > 360 ? 18 : 14,
                                       textcolor: white,
                                     ),
                                     const SizedBox(height: 5),
@@ -108,7 +108,7 @@ class PastTabView extends ConsumerWidget {
                                       text:
                                           'Price: ${appointment['service']['price'].toString()}',
                                       fontweight: FontWeight.w700,
-                                      fontsize: 18.sp,
+                                      fontsize: screenWidth > 360 ? 18 : 14,
                                       textcolor: white,
                                     ),
                                   ],
@@ -118,7 +118,7 @@ class PastTabView extends ConsumerWidget {
                                     Row(
                                       children: [
                                         RatingBar(
-                                          size: 19.sp,
+                                          size: screenWidth > 360 ? 18 : 14,
                                           filledIcon: Icons.star,
                                           emptyIcon: Icons.star_border,
                                           initialRating:
@@ -175,7 +175,7 @@ class PastTabView extends ConsumerWidget {
                                     customTextOne(
                                       text: 'Completed',
                                       fontweight: FontWeight.w700,
-                                      fontsize: 18.sp,
+                                      fontsize: screenWidth > 360 ? 18 : 14,
                                       textcolor: white,
                                     ),
                                   ],

@@ -132,10 +132,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   }
 
   Widget _buildTitle() {
+    double screenWidth = MediaQuery.of(context).size.width;
     return customTextWithAlignment(
       text: 'Sign Up',
       fontweight: FontWeight.w700,
-      fontsize: 40,
+      fontsize: screenWidth > 360 ? 30 : 25,
       textcolor: white,
       textalign: TextAlign.center,
     );
@@ -144,6 +145,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   Widget _buildEmailField({
     required TextEditingController emailController,
   }) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return Card(
       color: white,
       child: Container(
@@ -160,7 +162,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               Text(
                 '+1',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: screenWidth > 360 ? 18 : 14,
                   fontWeight: FontWeight.w700,
                   color: black,
                 ),
@@ -168,20 +170,19 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               Expanded(
                 child: TextField(
                   inputFormatters: [
-                    FilteringTextInputFormatter
-                        .digitsOnly, // Allow only numeric input
-                    LengthLimitingTextInputFormatter(
-                        10), // Limit input to 10 digits
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(10),
                   ],
                   controller: emailController,
                   cursorColor: grey,
                   keyboardType: TextInputType.phone,
-                  style: TextStyle(color: black, fontSize: 20),
+                  style: TextStyle(
+                      color: black, fontSize: screenWidth > 360 ? 16 : 12),
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.only(left: 10, bottom: 2),
                     hintText: 'Enter your phone',
                     hintStyle: TextStyle(
-                      fontSize: 20,
+                      fontSize: screenWidth > 360 ? 16 : 12,
                       fontWeight: FontWeight.w700,
                       color: grey,
                     ),

@@ -81,7 +81,7 @@ class _StaffLoginScreenState extends ConsumerState<StaffLoginScreen> {
           ),
           Center(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5.4.h),
+              padding: EdgeInsets.symmetric(horizontal: 35),
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -113,16 +113,18 @@ class _StaffLoginScreenState extends ConsumerState<StaffLoginScreen> {
   }
 
   Widget _buildTitle() {
+    double screenWidth = MediaQuery.of(context).size.width;
     return customTextWithAlignment(
       text: 'Staff Login',
       fontweight: FontWeight.w700,
-      fontsize: 40,
+      fontsize: screenWidth > 360 ? 30 : 25,
       textcolor: white,
       textalign: TextAlign.center,
     );
   }
 
   Widget _buildEmailField() {
+    double screenWidth = MediaQuery.of(context).size.width;
     return Card(
       color: white,
       child: Container(
@@ -139,7 +141,7 @@ class _StaffLoginScreenState extends ConsumerState<StaffLoginScreen> {
               Text(
                 '+1',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: screenWidth > 360 ? 18 : 14,
                   fontWeight: FontWeight.w700,
                   color: black,
                 ),
@@ -147,20 +149,19 @@ class _StaffLoginScreenState extends ConsumerState<StaffLoginScreen> {
               Expanded(
                 child: TextField(
                   inputFormatters: [
-                    FilteringTextInputFormatter
-                        .digitsOnly, // Allow only numeric input
-                    LengthLimitingTextInputFormatter(
-                        10), // Limit input to 10 digits
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(10),
                   ],
                   controller: emailController,
                   cursorColor: grey,
                   keyboardType: TextInputType.phone,
-                  style: TextStyle(color: black, fontSize: 20),
+                  style: TextStyle(
+                      color: black, fontSize: screenWidth > 360 ? 16 : 12),
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.only(left: 10),
                     hintText: 'Enter your phone',
                     hintStyle: TextStyle(
-                      fontSize: 20,
+                      fontSize: screenWidth > 360 ? 16 : 12,
                       fontWeight: FontWeight.w700,
                       color: grey,
                     ),
@@ -176,6 +177,7 @@ class _StaffLoginScreenState extends ConsumerState<StaffLoginScreen> {
   }
 
   Widget _buildLoginButton(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return SizedBox(
       height: 54,
       width: double.infinity,
@@ -195,7 +197,7 @@ class _StaffLoginScreenState extends ConsumerState<StaffLoginScreen> {
               : customTextWithAlignment(
                   text: 'Login',
                   fontweight: FontWeight.w700,
-                  fontsize: 20,
+                  fontsize: screenWidth > 360 ? 16 : 12,
                   textcolor: white,
                   textalign: TextAlign.center)),
     );
