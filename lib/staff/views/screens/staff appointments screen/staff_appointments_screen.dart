@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:epic/components/custom_text.dart';
 import 'package:epic/consts/colors.dart';
 import 'package:epic/staff/providers/get_appointments_provider.dart';
@@ -21,6 +23,7 @@ class _StaffAppointmentsScreenState
   @override
   Widget build(BuildContext context) {
     final appointmentsAsync = ref.watch(staffAppointmentsProvider);
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       //extendBodyBehindAppBar: true,
       floatingActionButton: FloatingActionButton(
@@ -54,7 +57,7 @@ class _StaffAppointmentsScreenState
         title: customTextOne(
           text: 'Appointments',
           fontweight: FontWeight.normal,
-          fontsize: 16.sp,
+          fontsize: screenWidth > 360 ? 16 : 12,
           textcolor: black,
         ),
         backgroundColor: background, // Makes AppBar background transparent
@@ -96,7 +99,7 @@ class _StaffAppointmentsScreenState
                       style: TextStyle(
                         color: newGrey,
                         fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                        fontSize: screenWidth > 360 ? 16 : 12,
                       ),
                     ),
                     appointmentsAsync.when(
@@ -107,7 +110,7 @@ class _StaffAppointmentsScreenState
                           style: TextStyle(
                             color: newGrey,
                             fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                            fontSize: screenWidth > 360 ? 16 : 12,
                           ),
                         );
                       },
@@ -132,7 +135,7 @@ class _StaffAppointmentsScreenState
               style: TextStyle(color: newGrey, fontSize: 20),
             ),
             SizedBox(
-              height: 2.h,
+              height: 8,
             ),
             appointmentsAsync.when(
               data: (data) {
@@ -153,27 +156,28 @@ class _StaffAppointmentsScreenState
                     itemCount: completedAppointments.length,
                     itemBuilder: (context, index) {
                       final data = completedAppointments[index];
+
                       String maskText(String text) {
                         if (text.length >= 4) {
-                          return '***${text.substring(text.length - 4)}';
+                          return '*${text.substring(text.length - 4)}';
                         } else {
                           return text;
                         }
                       }
 
-                      // String defaultImageUrl =
-                      //     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9nHrLn6HQN45iNAfQ2DXKp5nTyosP_2xxR8JDlZNwqgqfHnAjJys4oGh6_PWxP0RbtbY&usqp=CAU';
-                      String fullText = data['service']['_id'];
+                      String defaultImageUrl =
+                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9nHrLn6HQN45iNAfQ2DXKp5nTyosP_2xxR8JDlZNwqgqfHnAjJys4oGh6_PWxP0RbtbY&usqp=CAU';
+                      String fullText = data['service']['_id'] ?? '';
                       String maskedText = maskText(fullText);
-                      String serviceName = data['service']['name'];
+                      String serviceName = data['service']['name'] ?? '';
                       String serviceStatus = data['status'];
-                      String clientImagePath = data['user']['image_url'];
-                      String staffImagePath = data['barber']['image_url'];
+                      // String clientImagePath = data['user']['image_url'] ?? "";
+                      String staffImagePath = data['barber']['image_url'] ?? '';
                       return CompletedWidget(
                         id: maskedText,
                         service: serviceName,
                         status: serviceStatus,
-                        clientImagePath: clientImagePath,
+                        clientImagePath: defaultImageUrl,
                         staffImagePath: staffImagePath,
                       );
                     });
@@ -201,6 +205,7 @@ class CompletedWidget extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       child: Container(
@@ -238,7 +243,7 @@ class CompletedWidget extends StatelessWidget {
                       style: TextStyle(
                         color: black,
                         fontWeight: FontWeight.w600,
-                        fontSize: 16,
+                        fontSize: screenWidth > 360 ? 16 : 11,
                       ),
                     ),
                     Text(
@@ -246,7 +251,7 @@ class CompletedWidget extends StatelessWidget {
                       style: TextStyle(
                         color: black,
                         fontWeight: FontWeight.w600,
-                        fontSize: 16,
+                        fontSize: screenWidth > 360 ? 16 : 12,
                       ),
                     ),
                   ],
@@ -272,6 +277,7 @@ class CompletedWidget extends StatelessWidget {
                   status,
                   style: TextStyle(
                     color: primary,
+                    fontSize: screenWidth > 360 ? 16 : 12,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -292,6 +298,7 @@ class AppointmentsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
       child: GestureDetector(
@@ -314,7 +321,7 @@ class AppointmentsWidget extends StatelessWidget {
                 style: TextStyle(
                   color: newGrey,
                   fontWeight: FontWeight.bold,
-                  fontSize: 16,
+                  fontSize: screenWidth > 360 ? 16 : 12,
                 ),
               ),
               Icon(

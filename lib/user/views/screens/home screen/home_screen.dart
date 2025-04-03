@@ -16,6 +16,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:shimmer/shimmer.dart';
 import '../../../../staff/providers/staff_provider.dart';
 import '../../../providers/selectedService_notifier.dart';
 import '../../../providers/service_provider.dart';
@@ -137,6 +138,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     final servicesAsyncValue =
         ref.watch(serviceProvider); // Watch the serviceProvider
     final staffAsyncValue = ref.watch(staffProvider);
@@ -164,7 +166,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         title: customTextOne(
             text: 'Dashboard',
             fontweight: FontWeight.bold,
-            fontsize: 18.sp,
+            fontsize: screenWidth > 360 ? 18 : 16,
             textcolor: black),
       ),
       body: SingleChildScrollView(
@@ -184,10 +186,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           text: TextSpan(children: [
                         TextSpan(
                             text: '$greetingMessage\n',
-                            style: TextStyle(fontSize: 20.sp, color: blue)),
+                            style: TextStyle(
+                                fontSize: screenWidth > 360 ? 20 : 18,
+                                color: blue)),
                         TextSpan(
                             text: _username ?? 'New User',
-                            style: TextStyle(fontSize: 16.sp, color: black)),
+                            style: TextStyle(
+                                fontSize: screenWidth > 360 ? 16 : 14,
+                                color: black)),
                       ])),
                     ],
                   ),
@@ -197,21 +203,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       children: [
                         CircleAvatar(
                           radius: 50,
-                          backgroundColor: blue,
-                          child: _profileImageUrl != null
-                              ? CircleAvatar(
-                                  radius: 48,
-                                  backgroundColor: blue,
-                                  backgroundImage:
-                                      NetworkImage(_profileImageUrl!),
+                          backgroundColor: blue, // Always show blue background
+                          child: _profileImageUrl != null &&
+                                  _profileImageUrl!.isNotEmpty
+                              ? ClipOval(
+                                  child: Image.network(
+                                    _profileImageUrl!,
+                                    fit: BoxFit.cover,
+                                    width: 100,
+                                    height: 100,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Icon(Icons.person,
+                                          color: white, size: 50);
+                                    },
+                                  ),
                                 )
-                              : CircleAvatar(
-                                  backgroundColor: blue,
-                                  radius: 40,
-                                  child: Icon(Icons.person,
-                                      color: white, size: 60),
-                                ),
-                        ),
+                              : Icon(Icons.person, color: white, size: 50),
+                        )
                       ],
                     ),
                   ),
@@ -245,8 +253,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             final price = serviceData['price'] ?? '0';
                             // Update the selected service
                             ref.read(selectedServiceProvider.notifier).state =
-                                label; // Set serviceId
-                            // Navigate to the barber list screen with the correct serviceId
+                                label;
+
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -268,10 +276,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     AssetImage(serviceItems[index]['image']!),
                                 fit: BoxFit.cover,
                                 colorFilter: ColorFilter.mode(
-                                  Colors.black.withOpacity(
-                                      0.3), // Adjust the color and opacity
-                                  BlendMode
-                                      .darken, // Change the blending mode if needed
+                                  Colors.black.withOpacity(0.3),
+                                  BlendMode.darken,
                                 ),
                               ),
                             ),
@@ -279,7 +285,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               child: customTextOne(
                                   text: serviceData['name'] ?? 'New Service',
                                   fontweight: FontWeight.bold,
-                                  fontsize: 16.sp,
+                                  fontsize: screenWidth > 360 ? 16 : 10,
                                   textcolor: white),
                             ),
                           ),
@@ -287,11 +293,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       }),
                     );
                   },
-                  loading: () => Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Center(child: CircularProgressIndicator(color: red)),
-                    ],
+                  loading: () => Shimmer.fromColors(
+                    baseColor: Colors.grey.withOpacity(.2),
+                    highlightColor: Colors.white.withOpacity(.6),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(4, (index) {
+                        return Container(
+                          margin: EdgeInsets.only(left: index == 0 ? 0 : 10),
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: grey.withOpacity(.5),
+                          ),
+                        );
+                      }),
+                    ),
                   ),
                   error: (error, _) => Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -314,7 +332,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     "View all",
                     style: TextStyle(
                         color: black,
-                        fontSize: 16.sp,
+                        fontSize: screenWidth > 360 ? 16 : 12,
                         fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -350,8 +368,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           child: BackdropFilter(
                             filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
                             child: Container(
-                              color: Colors.black.withOpacity(
-                                  0.1), // Adjust the opacity as needed
+                              color: Colors.black.withOpacity(0.1),
                             ),
                           ),
                         ),
@@ -359,21 +376,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       // Content on top
                       Padding(
                         padding: EdgeInsets.only(
-                            left: 16.sp,
-                            right: 16.sp,
-                            top: 16.sp,
-                            bottom: 20.sp),
+                            left: 16, right: 16, top: 16, bottom: 20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            customText(
-                                'START AFRESH', FontWeight.bold, 18.sp, white),
+                            customText('START AFRESH', FontWeight.bold,
+                                screenWidth > 360 ? 18 : 16, white),
                             const SizedBox(height: 2),
-                            customText(
-                                'Get 20% Off', FontWeight.bold, 22.sp, white),
+                            customText('Get 20% Off', FontWeight.bold,
+                                screenWidth > 360 ? 20 : 16, white),
                             const SizedBox(height: 4),
-                            customText('On haircuts Between 9-10 AM.',
-                                FontWeight.bold, 16.sp, white),
+                            customText(
+                                'On haircuts Between 9-10 AM.',
+                                FontWeight.bold,
+                                screenWidth > 360 ? 16 : 12,
+                                white),
                             const Spacer(),
                             customButton(
                               ontap: () {
@@ -385,7 +402,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               text: 'Book Now',
                               fontsize: 12,
                               textcolor: white,
-                              radius: 20,
+                              radius: screenWidth > 360 ? 16 : 12,
                               fontWeight: FontWeight.bold,
                             ),
                           ],
@@ -401,7 +418,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  customText('OUR TEAM', FontWeight.bold, 18.sp, blue),
+                  customText('OUR TEAM', FontWeight.bold,
+                      screenWidth > 360 ? 16 : 14, blue),
                   const SizedBox(height: 16),
                   staffAsyncValue.when(
                     data: (staffList) {
@@ -410,7 +428,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           child: customTextOne(
                               text: "No staff members found",
                               fontweight: FontWeight.normal,
-                              fontsize: 16.sp,
+                              fontsize: 16,
                               textcolor: red),
                         );
                       }
@@ -438,26 +456,33 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                                 color: white, size: 50),
                                           ),
                                     const SizedBox(height: 5),
-                                    customText(staff?.username ?? 'New Stylist',
-                                        FontWeight.normal, 14.sp, black),
+                                    customText(
+                                        staff?.username ?? 'New Stylist',
+                                        FontWeight.normal,
+                                        screenWidth > 360 ? 14 : 10,
+                                        black),
                                   ],
                                 ));
                           }),
                         ),
                       );
                     },
-                    loading: () => SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: List.generate(8, (index) {
-                          return Padding(
-                              padding:
-                                  EdgeInsets.only(left: index == 0 ? 0 : 10),
-                              child: CircleAvatar(
-                                backgroundColor: grey.withOpacity(.5),
-                                radius: 40,
-                              ));
-                        }),
+                    loading: () => Shimmer.fromColors(
+                      baseColor: Colors.grey.withOpacity(.2),
+                      highlightColor: Colors.white.withOpacity(.6),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: List.generate(8, (index) {
+                            return Padding(
+                                padding:
+                                    EdgeInsets.only(left: index == 0 ? 0 : 10),
+                                child: CircleAvatar(
+                                  backgroundColor: grey.withOpacity(.5),
+                                  radius: 40,
+                                ));
+                          }),
+                        ),
                       ),
                     ),
                     error: (error, stack) => Center(

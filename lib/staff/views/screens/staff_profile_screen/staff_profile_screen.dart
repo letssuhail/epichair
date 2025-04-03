@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:epic/components/custom_text.dart';
 import 'package:epic/components/custom_text_field.dart';
 import 'package:epic/consts/colors.dart';
-import 'package:epic/consts/const.dart';
 import 'package:epic/user/providers/logout_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -129,21 +128,28 @@ class _StaffProfileScreenState extends ConsumerState<StaffProfileScreen> {
     showDialog<void>(
       context: context,
       builder: (BuildContext context) {
+        double screenWidth = MediaQuery.of(context).size.width;
+
         return AlertDialog(
           backgroundColor: background,
           title: Text(
             'Logout',
-            style: TextStyle(color: red),
+            style: TextStyle(
+              color: black,
+              fontSize: screenWidth > 360 ? 18 : 14,
+            ),
           ),
           content: Text(
             'Are you sure you want to log out?',
-            style: TextStyle(color: black),
+            style:
+                TextStyle(color: black, fontSize: screenWidth > 360 ? 16 : 12),
           ),
           actions: <Widget>[
             TextButton(
               child: Text(
                 'Cancel',
-                style: TextStyle(color: black),
+                style: TextStyle(
+                    color: black, fontSize: screenWidth > 360 ? 16 : 12),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -152,7 +158,8 @@ class _StaffProfileScreenState extends ConsumerState<StaffProfileScreen> {
             TextButton(
               child: Text(
                 'Yes',
-                style: TextStyle(color: black),
+                style: TextStyle(
+                    color: black, fontSize: screenWidth > 360 ? 16 : 12),
               ),
               onPressed: () async {
                 ref.read(logoutProvider.notifier).logout(context);
@@ -225,6 +232,7 @@ class _StaffProfileScreenState extends ConsumerState<StaffProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return ScaffoldMessenger(
       key: _scaffoldMessengerKey,
       child: Scaffold(
@@ -234,7 +242,7 @@ class _StaffProfileScreenState extends ConsumerState<StaffProfileScreen> {
           title: customTextOne(
             text: 'Profile',
             fontweight: FontWeight.bold,
-            fontsize: 16,
+            fontsize: screenWidth > 360 ? 18 : 14,
             textcolor: newGrey,
           ),
           actions: [

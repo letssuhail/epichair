@@ -15,6 +15,7 @@ class StaffConfirmTabView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    double screenWidth = MediaQuery.of(context).size.width;
     final appointmentsAsync = ref.watch(staffAppointmentsProvider);
 
     return RefreshIndicator(
@@ -106,19 +107,7 @@ class StaffConfirmTabView extends ConsumerWidget {
                           ),
                         ),
                       ),
-                      // Black Blur Effect
-                      // Positioned.fill(
-                      //   child: ClipRRect(
-                      //     borderRadius: BorderRadius.circular(10),
-                      //     child: BackdropFilter(
-                      //       filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
-                      //       child: Container(
-                      //         color: Colors.black.withOpacity(
-                      //             0.1), // Adjust the opacity as needed
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
+
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Column(
@@ -128,14 +117,14 @@ class StaffConfirmTabView extends ConsumerWidget {
                               children: [
                                 appointment['user']?['image_url'] != null
                                     ? CircleAvatar(
-                                        radius: 24.sp,
+                                        radius: screenWidth > 360 ? 35 : 30,
                                         backgroundColor: blue,
                                         backgroundImage: NetworkImage(
                                             appointment['user']?['image_url']),
                                       )
                                     : CircleAvatar(
                                         backgroundColor: blue,
-                                        radius: 24.sp,
+                                        radius: screenWidth > 360 ? 35 : 30,
                                         child: Icon(Icons.person,
                                             color: white, size: 26),
                                       ),
@@ -145,7 +134,7 @@ class StaffConfirmTabView extends ConsumerWidget {
                                     customTextOne(
                                       text: formattedDateTime,
                                       fontweight: FontWeight.w700,
-                                      fontsize: 18.sp,
+                                      fontsize: screenWidth > 360 ? 18 : 14,
                                       textcolor: white,
                                     ),
                                     Row(
@@ -155,14 +144,14 @@ class StaffConfirmTabView extends ConsumerWidget {
                                         customTextOne(
                                           text: appointment['service']['name'],
                                           fontweight: FontWeight.w700,
-                                          fontsize: 18.sp,
+                                          fontsize: screenWidth > 360 ? 18 : 14,
                                           textcolor: white,
                                         ),
                                         customTextOne(
                                           text:
                                               ',  Price: ${appointment['service']['price'].toString()}',
                                           fontweight: FontWeight.w700,
-                                          fontsize: 18.sp,
+                                          fontsize: screenWidth > 360 ? 18 : 14,
                                           textcolor: white,
                                         ),
                                       ],
@@ -177,7 +166,7 @@ class StaffConfirmTabView extends ConsumerWidget {
                               children: [
                                 Expanded(
                                   child: SizedBox(
-                                    height: 4.3.h,
+                                    height: 35,
                                     child: customButton(
                                       ontap: () {
                                         _showCompletedConfirmationDialog(
@@ -190,7 +179,7 @@ class StaffConfirmTabView extends ConsumerWidget {
                                       },
                                       backgroundcolor: newGrey,
                                       text: 'Completed',
-                                      fontsize: 15.sp,
+                                      fontsize: screenWidth > 360 ? 16 : 12,
                                       radius: 45,
                                       borderwidth: 1,
                                       textcolor: white,
@@ -231,25 +220,34 @@ class StaffConfirmTabView extends ConsumerWidget {
     showDialog<void>(
       context: context,
       builder: (BuildContext context) {
+        double screenWidth = MediaQuery.of(context).size.width;
         return AlertDialog(
           backgroundColor: white,
           title: Text(
             'Completed Appointment',
-            style: TextStyle(color: red),
+            style: TextStyle(
+              color: black,
+              fontSize: screenWidth > 360 ? 18 : 14,
+            ),
           ),
           content: Text(
             'Are you sure you want to completed this appointment?',
-            style: TextStyle(color: black),
+            style:
+                TextStyle(color: black, fontSize: screenWidth > 360 ? 16 : 12),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('No', style: TextStyle(color: black)),
+              child: Text('No',
+                  style: TextStyle(
+                      color: black, fontSize: screenWidth > 360 ? 16 : 12)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Yes', style: TextStyle(color: black)),
+              child: Text('Yes',
+                  style: TextStyle(
+                      color: black, fontSize: screenWidth > 360 ? 16 : 12)),
               onPressed: () {
                 ref
                     .read(staffAppointmentUpdateProvider.notifier)

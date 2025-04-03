@@ -43,12 +43,15 @@ Widget customTextField({
           controller: controller,
           cursorColor: grey,
           keyboardType: TextInputType.emailAddress,
-          style: TextStyle(color: black, fontSize: 20),
+          style: TextStyle(
+            color: black,
+            fontSize: screenWidth > 360 ? 18 : 14,
+          ),
           decoration: InputDecoration(
             hintText: hinttext,
             contentPadding: const EdgeInsets.only(left: 10),
             hintStyle: TextStyle(
-              fontSize: 20,
+              fontSize: screenWidth > 360 ? 18 : 14,
               fontWeight: FontWeight.w700,
               color: hintcolor ?? red,
             ),

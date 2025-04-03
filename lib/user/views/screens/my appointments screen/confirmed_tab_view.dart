@@ -15,6 +15,7 @@ class ConfirmedTabView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    double screenWidth = MediaQuery.of(context).size.width;
     // Listen to appointments provider to get the latest data
     final appointmentsAsync = ref.watch(appointmentsProvider);
 
@@ -143,7 +144,7 @@ class ConfirmedTabView extends ConsumerWidget {
                                     SvgPicture.asset(
                                       'assets/backgroundImages/expertbg.svg',
                                       fit: BoxFit.cover,
-                                      height: 10.h,
+
                                       // ignore: deprecated_member_use
                                       color: Colors.transparent,
                                     ),
@@ -152,7 +153,7 @@ class ConfirmedTabView extends ConsumerWidget {
                                         alignment: Alignment.center,
                                         child: CircleAvatar(
                                           backgroundColor: Colors.grey,
-                                          radius: 24.sp,
+                                          radius: screenWidth > 360 ? 35 : 30,
                                           backgroundImage: NetworkImage(
                                             appointment['barber']
                                                     ?['image_url'] ??
@@ -173,7 +174,7 @@ class ConfirmedTabView extends ConsumerWidget {
                                         customTextOne(
                                           text: formattedDateTime,
                                           fontweight: FontWeight.w700,
-                                          fontsize: 18.sp,
+                                          fontsize: screenWidth > 360 ? 18 : 14,
                                           textcolor: white,
                                         ),
                                         Row(
@@ -184,23 +185,26 @@ class ConfirmedTabView extends ConsumerWidget {
                                               text: appointment['service']
                                                   ['name'],
                                               fontweight: FontWeight.w700,
-                                              fontsize: 18.sp,
+                                              fontsize:
+                                                  screenWidth > 360 ? 18 : 14,
                                               textcolor: white,
                                             ),
                                             customTextOne(
                                               text:
                                                   ',  Price: ${appointment['service']['price'].toString()}',
                                               fontweight: FontWeight.w700,
-                                              fontsize: 18.sp,
+                                              fontsize:
+                                                  screenWidth > 360 ? 18 : 14,
                                               textcolor: white,
                                             ),
                                           ],
                                         ),
-                                        SizedBox(height: 10.sp),
+                                        SizedBox(height: 10),
                                         customTextOne(
                                             text: 'Confirmed',
                                             fontweight: FontWeight.bold,
-                                            fontsize: 16,
+                                            fontsize:
+                                                screenWidth > 360 ? 16 : 12,
                                             textcolor: white)
                                       ],
                                     ),

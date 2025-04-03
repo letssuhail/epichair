@@ -9,18 +9,15 @@ import 'package:epic/user/providers/logout_notifier.dart';
 import 'package:epic/user/utils/navigator_function.dart';
 import 'package:epic/user/views/screens/profile_screen/CommunityGuidelinesScreen/CommunityGuidelinesScreen.dart';
 import 'package:epic/user/views/screens/profile_screen/about%20us/about_us_screen.dart';
-import 'package:epic/user/views/screens/profile_screen/contact%20us/contact_us_screen.dart';
 import 'package:epic/user/views/screens/profile_screen/privacy%20policy/privacy_policy_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart'; // For getting file names
-import 'package:path_provider/path_provider.dart'; // Persistent storage
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../../../consts/const.dart';
 
 // Define the provider for the LogoutNotifier
 final logoutProvider = StateNotifierProvider<LogoutNotifier, bool>((ref) {
@@ -307,15 +304,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                               backgroundColor: blue,
                               backgroundImage: _profileImage != null
                                   ? FileImage(File(_profileImage!.path))
+                                      as ImageProvider
                                   : (_profileImageUrl != null &&
                                           _profileImageUrl!.isNotEmpty
                                       ? NetworkImage(_profileImageUrl!)
-                                          as ImageProvider
-                                      : null), // If no image, fallback to child
+                                      : null),
                               child: (_profileImage == null &&
                                       (_profileImageUrl == null ||
                                           _profileImageUrl!.isEmpty))
-                                  ? Icon(Icons.person,
+                                  ? const Icon(Icons.person,
                                       color: Colors.white, size: 60)
                                   : null,
                             ),

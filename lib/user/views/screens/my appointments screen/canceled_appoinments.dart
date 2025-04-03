@@ -15,6 +15,7 @@ class CalcelTabView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    double screenWidth = MediaQuery.of(context).size.width;
     // Listen to appointments provider to get the latest data
     final appointmentsAsync = ref.watch(appointmentsProvider);
 
@@ -123,8 +124,7 @@ class CalcelTabView extends ConsumerWidget {
                           child: BackdropFilter(
                             filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
                             child: Container(
-                              color: Colors.black.withOpacity(
-                                  0.1), // Adjust the opacity as needed
+                              color: Colors.black.withOpacity(0.1),
                             ),
                           ),
                         ),
@@ -142,7 +142,7 @@ class CalcelTabView extends ConsumerWidget {
                                 children: [
                                   CircleAvatar(
                                     backgroundColor: Colors.grey,
-                                    radius: 24.sp,
+                                    radius: screenWidth > 360 ? 35 : 30,
                                     backgroundImage: NetworkImage(
                                       appointment['barber']?['image_url'] ??
                                           'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9nHrLn6HQN45iNAfQ2DXKp5nTyosP_2xxR8JDlZNwqgqfHnAjJys4oGh6_PWxP0RbtbY&usqp=CAU',
@@ -155,7 +155,7 @@ class CalcelTabView extends ConsumerWidget {
                                       customTextOne(
                                         text: formattedDateTime,
                                         fontweight: FontWeight.w700,
-                                        fontsize: 18.sp,
+                                        fontsize: screenWidth > 360 ? 18 : 14,
                                         textcolor: white,
                                       ),
                                       Row(
@@ -166,14 +166,16 @@ class CalcelTabView extends ConsumerWidget {
                                             text: appointment['service']
                                                 ['name'],
                                             fontweight: FontWeight.w700,
-                                            fontsize: 18.sp,
+                                            fontsize:
+                                                screenWidth > 360 ? 18 : 14,
                                             textcolor: white,
                                           ),
                                           customTextOne(
                                             text:
                                                 ',  Price: ${appointment['service']['price'].toString()}',
                                             fontweight: FontWeight.w700,
-                                            fontsize: 18.sp,
+                                            fontsize:
+                                                screenWidth > 360 ? 18 : 14,
                                             textcolor: white,
                                           ),
                                         ],
@@ -182,7 +184,7 @@ class CalcelTabView extends ConsumerWidget {
                                       customTextOne(
                                           text: 'Cancelled',
                                           fontweight: FontWeight.bold,
-                                          fontsize: 16,
+                                          fontsize: screenWidth > 360 ? 16 : 12,
                                           textcolor: red)
                                     ],
                                   ),

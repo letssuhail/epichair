@@ -1,245 +1,11 @@
-import 'dart:developer';
-import 'dart:ui';
-
 import 'package:epic/user/providers/appointmentGet_provider.dart';
-// Import the update provider
 import 'package:epic/user/providers/appointment_update_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:epic/consts/colors.dart';
 import 'package:epic/components/custom_button.dart';
 import 'package:epic/components/custom_text.dart';
-
-// class OnGoingTabView extends ConsumerWidget {
-//   const OnGoingTabView({super.key});
-
-//   @override
-//   Widget build(BuildContext context, WidgetRef ref) {
-//     final appointmentsAsync = ref.watch(appointmentsProvider);
-
-//     return RefreshIndicator(
-//       backgroundColor: red,
-//       color: white,
-//       onRefresh: () async {
-//         ref.invalidate(appointmentsProvider);
-//       },
-//       child: appointmentsAsync.when(
-//         data: (data) {
-//           final ongoingAppointments = data['ongoing'] ?? [];
-
-//           if (ongoingAppointments.isEmpty) {
-//             return Center(
-//                 child: Text(
-//               'No ongoing appointments',
-//               style: TextStyle(color: red),
-//             ));
-//           }
-
-//           return ListView.builder(
-//             padding: const EdgeInsets.only(top: 10),
-//             itemCount: ongoingAppointments.length,
-//             shrinkWrap: true,
-//             itemBuilder: (context, index) {
-//               final appointment = ongoingAppointments[index];
-//               final appointmentId = appointment['_id'];
-//               final appointmentPrice = appointment['service']['price'];
-//               final serviceId = appointment['service']['_id'];
-
-//               String getOrdinalSuffix(int day) {
-//                 if (day >= 11 && day <= 13) return '${day}th';
-//                 switch (day % 10) {
-//                   case 1:
-//                     return '${day}st';
-//                   case 2:
-//                     return '${day}nd';
-//                   case 3:
-//                     return '${day}rd';
-//                   default:
-//                     return '${day}th';
-//                 }
-//               }
-
-//               DateTime combineDateAndTime(
-//                   DateTime appointmentDate, String appointmentTime) {
-//                 TimeOfDay parsedTime = TimeOfDay.fromDateTime(
-//                     DateFormat('hh:mm').parse(appointmentTime));
-//                 return DateTime(
-//                   appointmentDate.year,
-//                   appointmentDate.month,
-//                   appointmentDate.day,
-//                   parsedTime.hour,
-//                   parsedTime.minute,
-//                 );
-//               }
-
-//               String formatDateTime(DateTime appointmentDateTime) {
-//                 String day = DateFormat('d').format(appointmentDateTime);
-//                 String month = DateFormat('MMM').format(appointmentDateTime);
-//                 String time = DateFormat('h:mm').format(appointmentDateTime);
-
-//                 return '${getOrdinalSuffix(int.parse(day))} $month $time';
-//               }
-
-//               DateTime appointmentDate =
-//                   DateTime.parse(appointment['appointmentDate']!);
-
-//               DateTime appointmentDateTime = combineDateAndTime(
-//                   appointmentDate, appointment['appointmentTime']!);
-
-//               String formattedDateTime = formatDateTime(appointmentDateTime);
-
-//               return Padding(
-//                 padding: const EdgeInsets.only(bottom: 12),
-//                 child: Container(
-//                   decoration: BoxDecoration(
-//                     color: white,
-//                     border: Border.all(color: newGrey, width: 1.0),
-//                     borderRadius: BorderRadius.circular(10.0),
-//                   ),
-//                   child: Stack(
-//                     children: [
-//                       // Background Image
-//                       Positioned.fill(
-//                         child: ClipRRect(
-//                           borderRadius: BorderRadius.circular(10),
-//                           child: Image.asset(
-//                             'assets/backgroundImages/my-booking.jpg',
-//                             fit: BoxFit.cover,
-//                           ),
-//                         ),
-//                       ),
-//                       // Black Blur Effect
-//                       Positioned.fill(
-//                         child: ClipRRect(
-//                           borderRadius: BorderRadius.circular(10),
-//                           child: BackdropFilter(
-//                             filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
-//                             child: Container(
-//                               color: Colors.black.withOpacity(0.1),
-//                             ),
-//                           ),
-//                         ),
-//                       ),
-//                       Padding(
-//                         padding: const EdgeInsets.all(10.0),
-//                         child: Column(
-//                           children: [
-//                             Row(
-//                               mainAxisAlignment: MainAxisAlignment.spaceAround,
-//                               children: [
-//                                 CircleAvatar(
-//                                   backgroundColor: Colors.grey,
-//                                   radius: 24.sp,
-//                                   backgroundImage: NetworkImage(
-//                                     appointment['barber']?['image_url'] ??
-//                                         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9nHrLn6HQN45iNAfQ2DXKp5nTyosP_2xxR8JDlZNwqgqfHnAjJys4oGh6_PWxP0RbtbY&usqp=CAU',
-//                                   ),
-//                                 ),
-//                                 const SizedBox(height: 12),
-//                                 Column(
-//                                   children: [
-//                                     customTextOne(
-//                                       text: formattedDateTime,
-//                                       fontweight: FontWeight.w700,
-//                                       fontsize: 18.sp,
-//                                       textcolor: white,
-//                                     ),
-//                                     Row(
-//                                       mainAxisAlignment:
-//                                           MainAxisAlignment.center,
-//                                       children: [
-//                                         customTextOne(
-//                                           text: appointment['service']['name'],
-//                                           fontweight: FontWeight.w700,
-//                                           fontsize: 18.sp,
-//                                           textcolor: white,
-//                                         ),
-//                                         customTextOne(
-//                                           text:
-//                                               ',  Price: ${appointmentPrice.toString()}',
-//                                           fontweight: FontWeight.w700,
-//                                           fontsize: 18.sp,
-//                                           textcolor: white,
-//                                         ),
-//                                       ],
-//                                     ),
-//                                   ],
-//                                 ),
-//                               ],
-//                             ),
-//                             SizedBox(height: 14.sp),
-//                             Row(
-//                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                               children: [
-//                                 Expanded(
-//                                   child: SizedBox(
-//                                     height: 4.3.h,
-//                                     child: customButton(
-//                                       ontap: () {
-//                                         _showRescheduleDialog(context, ref,
-//                                             appointmentId, serviceId);
-//                                       },
-//                                       backgroundcolor: newGrey,
-//                                       text: 'Reschedule',
-//                                       fontsize: 14.sp,
-//                                       radius: 45,
-//                                       borderwidth: 1,
-//                                       textcolor: white,
-//                                       borderColor: newGrey,
-//                                       fontWeight: FontWeight.w700,
-//                                     ),
-//                                   ),
-//                                 ),
-//                                 const SizedBox(width: 12),
-//                                 Expanded(
-//                                   child: SizedBox(
-//                                     height: 4.3.h,
-//                                     width: 120,
-//                                     child: customButton(
-//                                       ontap: () {
-//                                         _showConfirmationDialog(
-//                                             context,
-//                                             ref,
-//                                             appointmentId,
-//                                             serviceId,
-//                                             false,
-//                                             appointmentDate,
-//                                             appointment['appointmentTime']!);
-//                                       },
-//                                       backgroundcolor: blue,
-//                                       text: 'Cancel',
-//                                       fontsize: 14.sp,
-//                                       radius: 45,
-//                                       borderwidth: 1,
-//                                       textcolor: white,
-//                                       borderColor: blue,
-//                                       fontWeight: FontWeight.w700,
-//                                     ),
-//                                   ),
-//                                 ),
-//                               ],
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               );
-//             },
-//           );
-//         },
-//         loading: () => Center(
-//             child: CircularProgressIndicator(
-//           color: red,
-//         )),
-//         error: (error, _) => Center(child: Text('Error: $error')),
-//       ),
-//     );
-//   }
 
 class OnGoingTabView extends ConsumerStatefulWidget {
   const OnGoingTabView({super.key});
@@ -249,10 +15,11 @@ class OnGoingTabView extends ConsumerStatefulWidget {
 }
 
 class _OnGoingTabViewState extends ConsumerState<OnGoingTabView> {
-  final Set<String> _loadingItems = {}; // Track loading state for each item
+  final Set<String> _loadingItems = {};
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     final appointmentsAsync = ref.watch(appointmentsProvider);
 
     return RefreshIndicator(
@@ -344,18 +111,7 @@ class _OnGoingTabViewState extends ConsumerState<OnGoingTabView> {
                           ),
                         ),
                       ),
-                      // Black Blur Effect
-                      // Positioned.fill(
-                      //   child: ClipRRect(
-                      //     borderRadius: BorderRadius.circular(10),
-                      //     child: BackdropFilter(
-                      //       filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
-                      //       child: Container(
-                      //         color: Colors.black.withOpacity(0.1),
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
+
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Column(
@@ -365,7 +121,7 @@ class _OnGoingTabViewState extends ConsumerState<OnGoingTabView> {
                               children: [
                                 appointment['barber']?['image_url'] != null
                                     ? CircleAvatar(
-                                        radius: 24.sp,
+                                        radius: screenWidth > 360 ? 35 : 30,
                                         backgroundColor: blue,
                                         backgroundImage: NetworkImage(
                                             appointment['barber']
@@ -373,7 +129,7 @@ class _OnGoingTabViewState extends ConsumerState<OnGoingTabView> {
                                       )
                                     : CircleAvatar(
                                         backgroundColor: blue,
-                                        radius: 24.sp,
+                                        radius: screenWidth > 360 ? 35 : 30,
                                         child: Icon(Icons.person,
                                             color: white, size: 20),
                                       ),
@@ -383,7 +139,7 @@ class _OnGoingTabViewState extends ConsumerState<OnGoingTabView> {
                                     customTextOne(
                                       text: formattedDateTime,
                                       fontweight: FontWeight.w700,
-                                      fontsize: 18.sp,
+                                      fontsize: screenWidth > 360 ? 18 : 14,
                                       textcolor: white,
                                     ),
                                     Row(
@@ -393,14 +149,14 @@ class _OnGoingTabViewState extends ConsumerState<OnGoingTabView> {
                                         customTextOne(
                                           text: appointment['service']['name'],
                                           fontweight: FontWeight.w700,
-                                          fontsize: 18.sp,
+                                          fontsize: screenWidth > 360 ? 18 : 14,
                                           textcolor: white,
                                         ),
                                         customTextOne(
                                           text:
                                               ',  Price: ${appointmentPrice.toString()}',
                                           fontweight: FontWeight.w700,
-                                          fontsize: 18.sp,
+                                          fontsize: screenWidth > 360 ? 18 : 14,
                                           textcolor: white,
                                         ),
                                       ],
@@ -409,13 +165,13 @@ class _OnGoingTabViewState extends ConsumerState<OnGoingTabView> {
                                 ),
                               ],
                             ),
-                            SizedBox(height: 14.sp),
+                            SizedBox(height: 14),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Expanded(
                                   child: SizedBox(
-                                    height: 4.3.h,
+                                    height: 35,
                                     child: customButton(
                                       ontap: () {
                                         _showRescheduleDialog(context, ref,
@@ -423,7 +179,7 @@ class _OnGoingTabViewState extends ConsumerState<OnGoingTabView> {
                                       },
                                       backgroundcolor: newGrey,
                                       text: 'Reschedule',
-                                      fontsize: 14.sp,
+                                      fontsize: screenWidth > 360 ? 14 : 10,
                                       radius: 45,
                                       borderwidth: 1,
                                       textcolor: white,
@@ -435,7 +191,7 @@ class _OnGoingTabViewState extends ConsumerState<OnGoingTabView> {
                                 const SizedBox(width: 12),
                                 Expanded(
                                   child: SizedBox(
-                                    height: 4.3.h,
+                                    height: 35,
                                     width: 120,
                                     child: customButton(
                                       ontap: () {
@@ -450,7 +206,7 @@ class _OnGoingTabViewState extends ConsumerState<OnGoingTabView> {
                                       },
                                       backgroundcolor: blue,
                                       text: 'Cancel',
-                                      fontsize: 14.sp,
+                                      fontsize: screenWidth > 360 ? 14 : 10,
                                       radius: 45,
                                       borderwidth: 1,
                                       textcolor: white,
@@ -490,11 +246,13 @@ Future<void> _showRescheduleDialog(BuildContext context, WidgetRef ref,
   await showDialog(
     context: context,
     builder: (BuildContext context) {
+      double screenWidth = MediaQuery.of(context).size.width;
       return AlertDialog(
         backgroundColor: background,
         title: Text(
           'Reschedule Appointment',
-          style: TextStyle(color: newGrey),
+          style:
+              TextStyle(color: newGrey, fontSize: screenWidth > 360 ? 18 : 14),
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -515,13 +273,12 @@ Future<void> _showRescheduleDialog(BuildContext context, WidgetRef ref,
                   builder: (BuildContext context, Widget? child) {
                     return Theme(
                       data: ThemeData.light().copyWith(
-                          primaryColor: red, // Header background color
-                          hintColor: red, // Selected date color
+                          primaryColor: red,
+                          hintColor: red,
                           colorScheme: ColorScheme.light(
-                            primary: red, // Header background color
-                            onPrimary: Colors.white, // Header text color
-                            onSurface:
-                                Colors.black, // Text color in the calendar
+                            primary: red,
+                            onPrimary: Colors.white,
+                            onSurface: Colors.black,
                           ),
                           dialogBackgroundColor: background),
                       child: child!,
@@ -550,14 +307,12 @@ Future<void> _showRescheduleDialog(BuildContext context, WidgetRef ref,
                   builder: (BuildContext context, Widget? child) {
                     return Theme(
                       data: ThemeData.light().copyWith(
-                        primaryColor: red, // Header background color
-
+                        primaryColor: red,
                         colorScheme: ColorScheme.light(
-                          primary: red, // Dial and header text color
-                          onSurface: Colors.black, // Text color in the dial
+                          primary: red,
+                          onSurface: Colors.black,
                         ),
-                        dialogBackgroundColor:
-                            background, // Background color of the dialog
+                        dialogBackgroundColor: background,
                       ),
                       child: child!,
                     );
@@ -575,13 +330,17 @@ Future<void> _showRescheduleDialog(BuildContext context, WidgetRef ref,
         ),
         actions: <Widget>[
           TextButton(
-            child: Text('Cancel', style: TextStyle(color: black)),
+            child: Text('Cancel',
+                style: TextStyle(
+                    color: black, fontSize: screenWidth > 360 ? 16 : 12)),
             onPressed: () {
               Navigator.of(context).pop();
             },
           ),
           TextButton(
-            child: Text('Confirm', style: TextStyle(color: black)),
+            child: Text('Confirm',
+                style: TextStyle(
+                    color: black, fontSize: screenWidth > 360 ? 16 : 12)),
             onPressed: () {
               ref
                   .read(appointmentUpdateProvider.notifier)
@@ -594,8 +353,7 @@ Future<void> _showRescheduleDialog(BuildContext context, WidgetRef ref,
                   )
                   .then((success) {
                 if (success) {
-                  ref.invalidate(
-                      appointmentsProvider); // Refresh the list upon success
+                  ref.invalidate(appointmentsProvider);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -634,30 +392,37 @@ Future<void> _showConfirmationDialog(
   showDialog<void>(
     context: context,
     builder: (BuildContext context) {
+      double screenWidth = MediaQuery.of(context).size.width;
       return AlertDialog(
         backgroundColor: background,
         title: Text(
           'Cancel Appointment',
-          style: TextStyle(color: red),
+          style: TextStyle(color: red, fontSize: screenWidth > 360 ? 18 : 14),
         ),
         content: isConfirm
             ? Text(
                 'Are you sure you want to confirm this appointment?',
-                style: TextStyle(color: red),
+                style: TextStyle(
+                    color: red, fontSize: screenWidth > 360 ? 16 : 12),
               )
             : Text(
                 'Are you sure you want to cancel this appointment?',
-                style: TextStyle(color: red),
+                style: TextStyle(
+                    color: red, fontSize: screenWidth > 360 ? 16 : 12),
               ),
         actions: <Widget>[
           TextButton(
-            child: Text('No', style: TextStyle(color: red)),
+            child: Text('No',
+                style: TextStyle(
+                    color: red, fontSize: screenWidth > 360 ? 16 : 12)),
             onPressed: () {
               Navigator.of(context).pop();
             },
           ),
           TextButton(
-            child: Text('Yes', style: TextStyle(color: red)),
+            child: Text('Yes',
+                style: TextStyle(
+                    color: red, fontSize: screenWidth > 360 ? 16 : 12)),
             onPressed: () {
               ref
                   .read(appointmentUpdateProvider.notifier)

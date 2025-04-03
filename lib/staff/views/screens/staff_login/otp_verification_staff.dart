@@ -1,14 +1,8 @@
 import 'dart:developer';
-
-import 'package:epic/components/custom_button.dart';
 import 'package:epic/components/custom_text.dart';
 import 'package:epic/consts/colors.dart';
-import 'package:epic/main.dart';
 import 'package:epic/staff/views/screens/bottom_nav_bar_staff_screen/bottom_nav_bar_staff.dart';
 import 'package:epic/user/providers/login_notifier.dart';
-import 'package:epic/user/utils/navigator_function.dart';
-import 'package:epic/user/views/screens/bottom_nav_bar_client_screen/bottom_nav_bar_client.dart';
-import 'package:epic/user/views/screens/home%20screen/home_screen.dart';
 import 'package:epic/user/views/screens/profile_screen/profile_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -119,18 +113,18 @@ class _OtpVerificationLoginStaffScreenState
             ),
             Center(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5.4.h),
+                padding: EdgeInsets.symmetric(horizontal: 35),
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       _buildLogo(),
-                      SizedBox(height: 3.h),
+                      SizedBox(height: 8),
                       _buildTitle(),
-                      SizedBox(height: 4.h),
+                      SizedBox(height: 15),
                       _buildPinField(
                           email: widget.email, otpController: otpController),
-                      SizedBox(height: 4.h),
+                      SizedBox(height: 15),
                       _buildSubmmitButton(context),
                     ],
                   ),
@@ -149,16 +143,18 @@ class _OtpVerificationLoginStaffScreenState
   }
 
   Widget _buildTitle() {
+    double screenWidth = MediaQuery.of(context).size.width;
     return customTextWithAlignment(
       text: 'Otp Verification',
       fontweight: FontWeight.w700,
-      fontsize: 40,
+      fontsize: screenWidth > 360 ? 30 : 25,
       textcolor: white,
       textalign: TextAlign.center,
     );
   }
 
   Widget _buildSubmmitButton(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return Column(
       children: [
         Container(
@@ -181,7 +177,7 @@ class _OtpVerificationLoginStaffScreenState
                     : customTextWithAlignment(
                         text: 'Submmit',
                         fontweight: FontWeight.w700,
-                        fontsize: 20,
+                        fontsize: screenWidth > 360 ? 16 : 12,
                         textcolor: white,
                         textalign: TextAlign.center))),
       ],

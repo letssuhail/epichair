@@ -13,6 +13,7 @@ class StaffUpcomingAppointmentsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -21,7 +22,7 @@ class StaffUpcomingAppointmentsScreen extends ConsumerWidget {
           title: customTextOne(
             text: 'Upcoming appointments',
             fontweight: FontWeight.normal,
-            fontsize: 16.sp,
+            fontsize: screenWidth > 360 ? 16 : 12,
             textcolor: black,
           ),
           backgroundColor: background, // Makes AppBar background transparent
@@ -55,7 +56,7 @@ class StaffUpcomingAppointmentsScreen extends ConsumerWidget {
         ),
         body: Center(
           child: Padding(
-            padding: EdgeInsets.only(left: 5.w, right: 5.w, bottom: 5.h),
+            padding: EdgeInsets.only(left: 14, right: 14, bottom: 10),
             child: Column(
               children: [
                 TabBar(
@@ -69,17 +70,20 @@ class StaffUpcomingAppointmentsScreen extends ConsumerWidget {
                       Text(
                         'Upcoming',
                         style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 16.sp),
+                            fontWeight: FontWeight.w700,
+                            fontSize: screenWidth > 360 ? 16 : 11),
                       ),
                       Text(
                         'Confirmed',
                         style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 16.sp),
+                            fontWeight: FontWeight.w700,
+                            fontSize: screenWidth > 360 ? 16 : 11),
                       ),
                       Text(
                         'Cancelled',
                         style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 16.sp),
+                            fontWeight: FontWeight.w700,
+                            fontSize: screenWidth > 360 ? 16 : 11),
                       ),
                     ]),
                 const Flexible(

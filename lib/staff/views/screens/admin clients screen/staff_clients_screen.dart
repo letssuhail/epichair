@@ -18,6 +18,7 @@ class _StaffClientsScreenState extends ConsumerState<StaffClientsScreen> {
   @override
   Widget build(BuildContext context) {
     final appointmentsAsync = ref.watch(staffAppointmentsProvider);
+    double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: background,
@@ -32,7 +33,9 @@ class _StaffClientsScreenState extends ConsumerState<StaffClientsScreen> {
             Text(
               "Past Customers",
               style: TextStyle(
-                  color: newGrey, fontSize: 26, fontWeight: FontWeight.bold),
+                  color: newGrey,
+                  fontSize: screenWidth > 360 ? 18 : 14,
+                  fontWeight: FontWeight.bold),
             ),
             SizedBox(
               height: 4.h,
@@ -43,24 +46,32 @@ class _StaffClientsScreenState extends ConsumerState<StaffClientsScreen> {
                     data: (data) {
                       final clientDataList = data['completed'] ?? [];
 
-                      // Filter unique users by _id
                       final uniqueClients = <Map<String, dynamic>>[];
                       final seenUserIds = <String>{};
 
                       for (var clientData in clientDataList) {
-                        final userId = clientData['user']['_id'];
-                        if (!seenUserIds.contains(userId)) {
-                          seenUserIds.add(userId);
-                          uniqueClients.add(clientData);
+                        final user = clientData['user'];
+                        if (user != null) {
+                          final userId = user['_id'];
+                          if (!seenUserIds.contains(userId)) {
+                            seenUserIds.add(userId);
+                            uniqueClients.add(clientData);
+                          }
                         }
                       }
 
+                      log('Unique Clients Count: ${uniqueClients.length}');
+
                       if (uniqueClients.isEmpty) {
                         return Center(
-                            child: Text(
-                          'No Past Customers',
-                          style: TextStyle(color: red),
-                        ));
+                          child: Text(
+                            'No Past Customers',
+                            style: TextStyle(
+                              color: red,
+                              fontSize: screenWidth > 360 ? 18 : 14,
+                            ),
+                          ),
+                        );
                       }
 
                       return GridView.builder(
@@ -79,7 +90,8 @@ class _StaffClientsScreenState extends ConsumerState<StaffClientsScreen> {
                           log(clientData.toString());
                           return avatarWidget(
                               imagePath: clientData['user']['image_url'],
-                              name: clientData['user']['username']);
+                              name: clientData['user']['username'],
+                              context: context);
                         },
                       );
                     },
@@ -98,7 +110,9 @@ class _StaffClientsScreenState extends ConsumerState<StaffClientsScreen> {
 Widget avatarWidget({
   required String imagePath,
   required String name,
+  required BuildContext context,
 }) {
+  double screenWidth = MediaQuery.of(context).size.width;
   return Column(
     mainAxisSize: MainAxisSize.min,
     children: [
@@ -113,11 +127,11 @@ Widget avatarWidget({
               radius: 40,
               child: Icon(Icons.person, color: white, size: 60),
             ),
-      SizedBox(height: 8.sp),
+      SizedBox(height: 8),
       Text(
         name,
         style: TextStyle(
-          fontSize: 17.sp,
+          fontSize: screenWidth > 360 ? 16 : 12,
           fontWeight: FontWeight.bold,
           color: black,
         ),

@@ -72,6 +72,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: background,
       appBar: AppBar(
@@ -79,37 +80,37 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
         title: customTextOne(
           text: 'Book an appointment',
           fontweight: FontWeight.normal,
-          fontsize: 16.sp,
+          fontsize: screenWidth > 360 ? 16 : 12,
           textcolor: black,
         ),
-        backgroundColor: background, // Makes AppBar background transparent
-        elevation: 0, // Removes the AppBar shadow
+        backgroundColor: background,
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(left: 5.w, right: 5.w, bottom: 5.h),
+          padding: EdgeInsets.only(left: 14, right: 14, bottom: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               _buildTopSection(),
               SizedBox(
-                height: 3.h,
+                height: 15,
               ),
               _buildDateSelector(),
               SizedBox(
-                height: 3.h,
+                height: 8,
               ),
               _buildTimeSlotSelector(),
               SizedBox(
-                height: 4.h,
+                height: 15,
               ),
               _buildExpertSelector(widget.barberImage),
               SizedBox(
-                height: 3.h,
+                height: 10,
               ),
               _buildBookButton(context),
               SizedBox(
-                height: 2.h,
+                height: 6,
               ),
               // _buildCancelButton(),
             ],
@@ -120,6 +121,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
   }
 
   Widget _buildTopSection() {
+    double screenWidth = MediaQuery.of(context).size.width;
     return Container(
       height: 120,
       width: double.infinity,
@@ -145,28 +147,26 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
                 child: Container(
-                  color: Colors.black
-                      .withOpacity(0.1), // Adjust the opacity as needed
+                  color: Colors.black.withOpacity(0.1),
                 ),
               ),
             ),
           ),
           // Content on top
           Padding(
-            padding: EdgeInsets.only(
-                left: 16.sp, right: 16.sp, top: 16.sp, bottom: 20.sp),
+            padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    customText(
-                        widget.serviceName, FontWeight.normal, 22.sp, white),
+                    customText(widget.serviceName, FontWeight.normal,
+                        screenWidth > 360 ? 24 : 18, white),
                     Text(
                       'Rs. ${widget.servicePrice}',
                       style: TextStyle(
-                        fontSize: 18.sp,
+                        fontSize: screenWidth > 360 ? 18 : 15,
                         color: white, // Text color
                         fontWeight: FontWeight.bold,
                       ),
@@ -177,7 +177,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
                 Text(
                   widget.barberName,
                   style: TextStyle(
-                    fontSize: 18.sp,
+                    fontSize: screenWidth > 360 ? 16 : 12,
                     color: white, // Text color
                     fontWeight: FontWeight.normal,
                   ),
@@ -191,6 +191,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
   }
 
   Widget _buildDateSelector() {
+    double screenWidth = MediaQuery.of(context).size.width;
     return Column(
       children: [
         Container(
@@ -208,13 +209,14 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
               return GestureDetector(
                 onTap: () => _onDateSelected(date),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 2.w),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth > 360 ? 8 : 6),
                   child: Column(
                     children: [
                       customTextOne(
-                          text: DateFormat.E().format(date), // Day abbreviation
+                          text: DateFormat.E().format(date),
                           fontweight: FontWeight.w400,
-                          fontsize: 17.sp,
+                          fontsize: screenWidth > 360 ? 16 : 10,
                           textcolor: newGrey),
                       SizedBox(
                         height: 2.h,
@@ -222,7 +224,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
                       customTextOne(
                           text: DateFormat.d().format(date), // Date
                           fontweight: FontWeight.w400,
-                          fontsize: 17.sp,
+                          fontsize: screenWidth > 360 ? 16 : 14,
                           textcolor: isSelected ? red : black),
                     ],
                   ),
@@ -236,12 +238,14 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
   }
 
   Widget _buildTimeSlotSelector() {
+    double screenWidth = MediaQuery.of(context).size.width;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          customText('Available Slot', FontWeight.normal, 16.sp, black),
+          customText('Available Slot', FontWeight.normal,
+              screenWidth > 360 ? 16 : 12, black),
           const SizedBox(height: 6),
           SizedBox(
             height: 160,
@@ -271,7 +275,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
                           child: customTextOne(
                               text: timeSlot,
                               fontweight: FontWeight.w600,
-                              fontsize: 16.sp,
+                              fontsize: screenWidth > 360 ? 16 : 12,
                               textcolor: isSelected ? white : black),
                         )),
                   );
@@ -283,10 +287,12 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
   }
 
   Widget _buildExpertSelector(String barberImage) {
+    double screenWidth = MediaQuery.of(context).size.width;
     // For now, we will leave this unchanged
     return Column(
       children: [
-        customText('This Your Expert', FontWeight.normal, 16.sp, black),
+        customText('This Your Expert', FontWeight.normal,
+            screenWidth > 360 ? 16 : 12, black),
         SizedBox(
           height: 2.h,
         ),
@@ -297,16 +303,15 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
               CircleAvatar(
                 backgroundImage: NetworkImage(barberImage),
                 backgroundColor: Colors.transparent,
-                radius: 40, // Adjust the size of the avatar
+                radius: 40,
               ),
 
               // Light black background overlay
               Positioned.fill(
                 child: Container(
                   decoration: BoxDecoration(
-                    color:
-                        Colors.black.withOpacity(0.2), // Semi-transparent black
-                    shape: BoxShape.circle, // Ensures the overlay is circular
+                    color: Colors.black.withOpacity(0.2),
+                    shape: BoxShape.circle,
                   ),
                 ),
               ),
@@ -315,8 +320,8 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
               Positioned.fill(
                 child: Align(
                   alignment: Alignment.center,
-                  child: customText(
-                      widget.barberName, FontWeight.normal, 15.sp, white),
+                  child: customText(widget.barberName, FontWeight.normal,
+                      screenWidth > 360 ? 16 : 10, white),
                 ),
               ),
             ],
@@ -327,6 +332,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
   }
 
   Widget _buildBookButton(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return SizedBox(
       height: 50,
       width: 180,
@@ -360,7 +366,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
         },
         backgroundcolor: blue,
         text: 'Book Appointment',
-        fontsize: 16.sp,
+        fontsize: screenWidth > 360 ? 16 : 10,
         radius: 12,
         borderwidth: 1,
         textcolor: white,
@@ -369,24 +375,4 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
       ),
     );
   }
-
-  // Widget _buildCancelButton() {
-  //   return SizedBox(
-  //     height: 40,
-  //     width: 160,
-  //     child: customButton(
-  //       ontap: () {
-  //         Navigator.pop(context);
-  //       },
-  //       backgroundcolor: newGrey,
-  //       text: 'Cancel',
-  //       fontsize: 15.sp,
-  //       radius: 45,
-  //       borderwidth: 1,
-  //       textcolor: white,
-  //       borderColor: newGrey,
-  //       fontWeight: FontWeight.w700,
-  //     ),
-  //   );
-  // }
 }

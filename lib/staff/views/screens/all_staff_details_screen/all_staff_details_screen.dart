@@ -12,6 +12,7 @@ class AllStaffDetailsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final staffAsyncValue = ref.watch(staffProvider);
+    double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: background,
@@ -46,7 +47,7 @@ class AllStaffDetailsScreen extends ConsumerWidget {
         title: customTextOne(
             text: 'Staff Members',
             fontweight: FontWeight.bold,
-            fontsize: 18.sp,
+            fontsize: screenWidth > 360 ? 18 : 14,
             textcolor: black),
       ),
       body: staffAsyncValue.when(
@@ -56,7 +57,7 @@ class AllStaffDetailsScreen extends ConsumerWidget {
               child: customTextOne(
                   text: "No staff members found",
                   fontweight: FontWeight.normal,
-                  fontsize: 16.sp,
+                  fontsize: screenWidth > 360 ? 16 : 12,
                   textcolor: red),
             );
           }
@@ -95,11 +96,11 @@ class AllStaffDetailsScreen extends ConsumerWidget {
                           ? CircleAvatar(
                               backgroundColor: blue,
                               backgroundImage: NetworkImage(staff.imageUrl!),
-                              radius: 50,
+                              radius: screenWidth > 360 ? 50 : 45,
                             )
                           : CircleAvatar(
                               backgroundColor: blue,
-                              radius: 50,
+                              radius: screenWidth > 360 ? 50 : 45,
                               child: Icon(Icons.person, color: white, size: 50),
                             ),
                       const SizedBox(width: 14),
@@ -110,17 +111,17 @@ class AllStaffDetailsScreen extends ConsumerWidget {
                             customTextOne(
                                 text: staff?.username ?? 'New Stylist',
                                 fontweight: FontWeight.bold,
-                                fontsize: 18.sp,
+                                fontsize: screenWidth > 360 ? 18 : 12,
                                 textcolor: black),
                             customTextOne(
                                 text: 'Email: ${staff.phoneNumber}"',
                                 fontweight: FontWeight.bold,
-                                fontsize: 16.sp,
+                                fontsize: screenWidth > 360 ? 16 : 10,
                                 textcolor: black),
                             customTextOne(
                               text: 'Services: ${staff.services.join(', ')}',
                               fontweight: FontWeight.bold,
-                              fontsize: 16.sp,
+                              fontsize: screenWidth > 360 ? 16 : 10,
                               textcolor: red,
                             ),
                           ],
