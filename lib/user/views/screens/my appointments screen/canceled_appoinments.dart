@@ -172,7 +172,7 @@ class CalcelTabView extends ConsumerWidget {
                                           ),
                                           customTextOne(
                                             text:
-                                                ',  Price: ${appointment['service']['price'].toString()}',
+                                                ',  Price: CA\$${appointment['service']['price'].toString()}',
                                             fontweight: FontWeight.w700,
                                             fontsize:
                                                 screenWidth > 360 ? 18 : 14,

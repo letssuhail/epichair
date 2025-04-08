@@ -119,18 +119,18 @@ class ConfirmedTabView extends ConsumerWidget {
                         ),
                       ),
                       // Black Blur Effect
-                      Positioned.fill(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: BackdropFilter(
-                            filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
-                            child: Container(
-                              color: Colors.black.withOpacity(
-                                  0.1), // Adjust the opacity as needed
-                            ),
-                          ),
-                        ),
-                      ),
+                      // Positioned.fill(
+                      //   child: ClipRRect(
+                      //     borderRadius: BorderRadius.circular(10),
+                      //     child: BackdropFilter(
+                      //       filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
+                      //       child: Container(
+                      //         color: Colors.black.withOpacity(
+                      //             0.1), // Adjust the opacity as needed
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Column(
@@ -138,32 +138,20 @@ class ConfirmedTabView extends ConsumerWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Stack(
-                                  alignment: Alignment.topLeft,
-                                  children: [
-                                    SvgPicture.asset(
-                                      'assets/backgroundImages/expertbg.svg',
-                                      fit: BoxFit.cover,
-
-                                      // ignore: deprecated_member_use
-                                      color: Colors.transparent,
-                                    ),
-                                    Positioned.fill(
-                                      child: Align(
-                                        alignment: Alignment.center,
-                                        child: CircleAvatar(
-                                          backgroundColor: Colors.grey,
-                                          radius: screenWidth > 360 ? 35 : 30,
-                                          backgroundImage: NetworkImage(
+                                appointment['barber']?['image_url'] != null
+                                    ? CircleAvatar(
+                                        radius: screenWidth > 360 ? 35 : 30,
+                                        backgroundColor: blue,
+                                        backgroundImage: NetworkImage(
                                             appointment['barber']
-                                                    ?['image_url'] ??
-                                                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9nHrLn6HQN45iNAfQ2DXKp5nTyosP_2xxR8JDlZNwqgqfHnAjJys4oGh6_PWxP0RbtbY&usqp=CAU',
-                                          ),
-                                        ),
+                                                ?['image_url']),
+                                      )
+                                    : CircleAvatar(
+                                        backgroundColor: blue,
+                                        radius: screenWidth > 360 ? 35 : 30,
+                                        child: Icon(Icons.person,
+                                            color: white, size: 20),
                                       ),
-                                    ),
-                                  ],
-                                ),
                                 Expanded(
                                   child: Align(
                                     alignment: Alignment.center,
@@ -191,7 +179,7 @@ class ConfirmedTabView extends ConsumerWidget {
                                             ),
                                             customTextOne(
                                               text:
-                                                  ',  Price: ${appointment['service']['price'].toString()}',
+                                                  ',  Price: CA\$${appointment['service']['price'].toString()}',
                                               fontweight: FontWeight.w700,
                                               fontsize:
                                                   screenWidth > 360 ? 18 : 14,

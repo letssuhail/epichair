@@ -1,4 +1,4 @@
-package com.app.epichairhair
+package com.noblessetech.epichair
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -154,7 +154,7 @@ class _OnGoingTabViewState extends ConsumerState<OnGoingTabView> {
                                         ),
                                         customTextOne(
                                           text:
-                                              ',  Price: ${appointmentPrice.toString()}',
+                                              ',  Price: CA\$${appointmentPrice.toString()}',
                                           fontweight: FontWeight.w700,
                                           fontsize: screenWidth > 360 ? 18 : 14,
                                           textcolor: white,

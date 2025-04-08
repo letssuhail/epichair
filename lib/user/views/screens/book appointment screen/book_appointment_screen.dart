@@ -164,7 +164,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
                     customText(widget.serviceName, FontWeight.normal,
                         screenWidth > 360 ? 24 : 18, white),
                     Text(
-                      'Rs. ${widget.servicePrice}',
+                      'CA\$${widget.servicePrice}',
                       style: TextStyle(
                         fontSize: screenWidth > 360 ? 18 : 15,
                         color: white, // Text color
