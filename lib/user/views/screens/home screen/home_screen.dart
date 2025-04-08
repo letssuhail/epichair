@@ -285,7 +285,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               child: customTextOne(
                                   text: serviceData['name'] ?? 'New Service',
                                   fontweight: FontWeight.bold,
-                                  fontsize: screenWidth > 360 ? 16 : 10,
+                                  fontsize: screenWidth > 360 ? 13 : 10,
                                   textcolor: white),
                             ),
                           ),

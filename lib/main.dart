@@ -36,7 +36,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       }
     } catch (e) {
       // Handle error, e.g., show a toast
-      Fluttertoast.showToast(msg: "Failed to check for updates: $e");
+      // Fluttertoast.showToast(msg: "Failed to check for updates: $e");
     }
   }
 
@@ -63,8 +63,8 @@ class _MyAppState extends ConsumerState<MyApp> {
                 backgroundColor: black,
                 body: Center(
                   child: Container(
-                    width: 420,
-                    constraints: BoxConstraints(maxWidth: 420),
+                    width: 500,
+                    constraints: BoxConstraints(maxWidth: 500),
                     child: child,
                   ),
                 ));
