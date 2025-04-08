@@ -169,7 +169,7 @@ class NewHaircutWidget extends ConsumerWidget {
                 ),
                 const SizedBox(height: 5),
                 Text(
-                  '₹$price.00',
+                  'CA\$$price.00',
                   style: TextStyle(
                     fontSize: screenWidth > 360 ? 13 : 11,
                     color: black, // Text color
