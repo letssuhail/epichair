@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:epic/user%20decide%20screen/user_type_decide_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,12 +16,12 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  bool _isLoading = true; // Added loading state
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    // Ensure navigation happens after first frame is rendered
+
     Future.delayed(Duration.zero, () => navigateBasedOnAuth());
   }
 
@@ -29,6 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
     String? token = prefs.getString('userToken');
 
     if (token != null && token.isNotEmpty) {
+      log('token $token');
       final parts = token.split('.');
       if (parts.length == 3) {
         try {
