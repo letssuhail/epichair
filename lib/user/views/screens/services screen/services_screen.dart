@@ -20,6 +20,22 @@ class ServicesScreen extends ConsumerWidget {
     final servicesAsyncValue = ref.watch(serviceProvider);
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: white,
+        centerTitle: true,
+        title: Text(
+          'Choose your Service',
+          style: TextStyle(
+            color: newGrey,
+            fontWeight: FontWeight.bold,
+            fontSize: screenWidth > 360 ? 20 : 14,
+            decoration: TextDecoration.underline,
+            decorationColor: newGrey,
+            decorationThickness: 2,
+          ),
+        ),
+        // leading: Icon(Icons.arrow_back),
+      ),
       backgroundColor: background,
       body: SafeArea(
         child: Padding(
@@ -27,17 +43,13 @@ class ServicesScreen extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(
-                'Choose your Service',
-                style: TextStyle(
-                  color: newGrey,
-                  fontWeight: FontWeight.bold,
-                  fontSize: screenWidth > 360 ? 20 : 14,
-                  decoration: TextDecoration.underline,
-                  decorationColor: newGrey,
-                  decorationThickness: 2,
-                ),
-              ),
+              // Row(
+              //   children: [
+              //     Icon(Icons.arrow_back),
+              //     SizedBox(width: 10),
+
+              //   ],
+              // ),
               SizedBox(height: 20),
 
               // Add RefreshIndicator to allow pull-to-refresh functionality
@@ -61,7 +73,7 @@ class ServicesScreen extends ConsumerWidget {
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
-                          childAspectRatio: 1, // Adjust size of grid items
+                          childAspectRatio: 1,
                           mainAxisSpacing: 10,
                           crossAxisSpacing: 10,
                         ),
@@ -76,8 +88,7 @@ class ServicesScreen extends ConsumerWidget {
                             id: serviceId,
                             label: serviceName,
                             pathh: "assets/new-icons/hair-cut.svg",
-                            price: servicePrice
-                                .toString(), // Placeholder for service icons
+                            price: servicePrice.toString(),
                           );
                         },
                       );

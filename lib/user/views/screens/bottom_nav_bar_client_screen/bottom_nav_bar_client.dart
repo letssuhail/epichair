@@ -5,7 +5,6 @@ import 'package:epic/user/views/screens/profile_screen/profile_screen.dart';
 import 'package:epic/user/views/screens/services%20screen/services_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 
 final bottomNavIndexProvider = StateProvider<int>((ref) => 0);
 

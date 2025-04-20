@@ -15,13 +15,25 @@ class UserProfile {
 class StaffProfile {
   final String? username;
   final String? imageUrl;
+  final bool? isOnHoliday;
+  final Map<String, String>? workingHours;
 
-  StaffProfile({this.username, this.imageUrl});
+  StaffProfile({
+    this.username,
+    this.imageUrl,
+    this.isOnHoliday,
+    this.workingHours,
+  });
 
   factory StaffProfile.fromJson(Map<String, dynamic> json) {
     return StaffProfile(
       username: json['username'],
-      imageUrl: json['image_url'],
+      imageUrl: json[
+          'image_url'], // Note: Changed to 'image_url' to match your current code
+      isOnHoliday: json['isOnHoliday'],
+      workingHours: json['workingHours'] != null
+          ? Map<String, String>.from(json['workingHours'])
+          : null,
     );
   }
 }

@@ -1,19 +1,32 @@
+import 'dart:developer';
+
 import 'package:epic/user/views/screens/book%20appointment%20screen/book_appointment_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:epic/consts/colors.dart';
 import 'package:epic/user/providers/barberList_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:intl/intl.dart'; // To format time in AM/PM format
 
 class BarberListScreen extends ConsumerWidget {
   final String serviceId;
   final String serviceName;
   final String servicePrice;
-  const BarberListScreen(
-      {required this.serviceName,
-      required this.serviceId,
-      required this.servicePrice,
-      super.key});
+
+  const BarberListScreen({
+    required this.serviceName,
+    required this.serviceId,
+    required this.servicePrice,
+    super.key,
+  });
+
+  // Helper function to convert 24-hour format time to 12-hour format with AM/PM
+  String convertToAMPM(String time24) {
+    final format = DateFormat("hh:mm a"); // 12-hour format with AM/PM
+    final parsedTime = DateFormat("HH:mm").parse(time24); // Parse 24-hour time
+    return format.format(parsedTime); // Convert to AM/PM format
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,18 +42,27 @@ class BarberListScreen extends ConsumerWidget {
       ),
       body: barberListAsync.when(
         data: (barbers) {
-          // Ensure barbers list is not null or empty
           if (barbers == null || barbers.isEmpty) {
             return Center(
-                child: Text(
-              'No barbers available for this service',
-              style: TextStyle(color: black),
-            ));
+              child: Text(
+                'No barbers available for this service',
+                style: TextStyle(color: black),
+              ),
+            );
           }
+
           return ListView.builder(
             itemCount: barbers.length,
             itemBuilder: (context, index) {
               final barber = barbers[index];
+              final workingHours = barber['workingHours'];
+              final startTime = workingHours != null
+                  ? convertToAMPM(workingHours['start']!)
+                  : 'N/A';
+              final endTime = workingHours != null
+                  ? convertToAMPM(workingHours['end']!)
+                  : 'N/A';
+
               return Column(
                 children: [
                   if (index == 0)
@@ -75,20 +97,50 @@ class BarberListScreen extends ConsumerWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+                      subtitle: Text(
+                        '$startTime - $endTime',
+                        style: TextStyle(
+                          fontSize: screenWidth > 360 ? 14 : 12,
+                          color: black.withOpacity(0.6),
+                        ),
+                      ),
+                      trailing: Text(
+                        barber['isOnHoliday'] == true
+                            ? 'On Holiday'
+                            : 'Available',
+                        style: TextStyle(
+                          fontSize: screenWidth > 360 ? 18 : 12,
+                          color: barber['isOnHoliday'] == true
+                              ? red
+                              : Colors.green,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BookAppointmentScreen(
-                              barberId: barber['id']!,
-                              barberName: barber['name']!,
-                              serviceId: serviceId,
-                              barberImage: barber['imageUrl']!,
-                              serviceName: serviceName,
-                              servicePrice: servicePrice,
+                        if (barber['isOnHoliday'] == true) {
+                          Fluttertoast.showToast(
+                            msg:
+                                'The barber is on holiday. Choose another barber.',
+                            backgroundColor: red,
+                            textColor: white,
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER,
+                          );
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BookAppointmentScreen(
+                                barberId: barber['id']!,
+                                barberName: barber['name']!,
+                                serviceId: serviceId,
+                                barberImage: barber['imageUrl']!,
+                                serviceName: serviceName,
+                                servicePrice: servicePrice,
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        }
                       },
                     ),
                   ),
@@ -102,12 +154,15 @@ class BarberListScreen extends ConsumerWidget {
             color: red,
           ),
         ),
-        error: (error, _) => Center(
-          child: Text(
-            'Failed to load barbers: ${error.toString()}',
-            style: TextStyle(color: Colors.red),
-          ),
-        ),
+        error: (error, _) {
+          log('error $error');
+          return Center(
+            child: Text(
+              'Failed to load barbers: ${error.toString()}',
+              style: TextStyle(color: Colors.red),
+            ),
+          );
+        },
       ),
     );
   }
