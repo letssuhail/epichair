@@ -181,7 +181,7 @@ class _OtpVerificationLoginScreenState
                         color: white,
                       )
                     : customTextWithAlignment(
-                        text: 'Subbmit',
+                        text: 'Submit',
                         fontweight: FontWeight.w700,
                         fontsize: screenWidth > 360 ? 16 : 12,
                         textcolor: white,

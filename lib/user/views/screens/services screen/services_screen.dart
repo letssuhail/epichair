@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:epic/user/providers/selectedService_notifier.dart';
 import 'package:epic/user/providers/service_provider.dart';
 import 'package:epic/user/views/screens/barber%20list%20screen/barber_list_screen.dart';
@@ -37,6 +39,31 @@ class ServicesScreen extends ConsumerWidget {
         // leading: Icon(Icons.arrow_back),
       ),
       backgroundColor: background,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: red,
+        child: Icon(
+          Icons.refresh,
+          color: white,
+        ),
+        onPressed: () {
+          try {
+            ref.invalidate(serviceProvider);
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                backgroundColor: background,
+                content: Text(
+                  'Refresh successfully',
+                  style: TextStyle(color: red),
+                )));
+          } catch (e) {
+            SnackBar(
+                backgroundColor: Colors.red,
+                content: Text(
+                  'Refresh Field',
+                  style: TextStyle(color: white),
+                ));
+          }
+        },
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 20.0),
@@ -80,6 +107,7 @@ class ServicesScreen extends ConsumerWidget {
                         itemCount: services.length,
                         itemBuilder: (context, index) {
                           final service = services[index];
+
                           final serviceName = service['name'] ?? 'New Service';
                           final servicePrice = service['price'] ?? '0';
                           final serviceId = service['_id'] ?? 'unknown id';

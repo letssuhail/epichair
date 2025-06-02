@@ -6,7 +6,9 @@ import 'package:epic/components/custom_button.dart';
 import 'package:epic/components/custom_text.dart';
 import 'package:epic/consts/colors.dart';
 import 'package:epic/consts/const.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:epic/user/models/user_profile_model.dart';
+import 'package:epic/user/providers/offer_provider.dart';
 import 'package:epic/user/utils/navigator_function.dart';
 import 'package:epic/user/views/screens/profile_screen/profile_screen.dart';
 import 'package:epic/user/views/screens/services%20screen/services_screen.dart';
@@ -136,9 +138,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     },
   ];
 
+  final List<String> offerImages = [
+    'https://images.template.net/373698/Salon-Special-Offer-Banner-Template-edit-online-1.jpg',
+    'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/hair-salon-banner-design-template-00775b96be55ea3af8180e7654c8c2a0_screen.jpg'
+  ];
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+    final offerProvider = ref.watch(getOfferProvider);
     final servicesAsyncValue =
         ref.watch(serviceProvider); // Watch the serviceProvider
     final staffAsyncValue = ref.watch(staffProvider);
@@ -418,79 +426,64 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  customText('OUR TEAM', FontWeight.bold,
+                  customText('OFFERS', FontWeight.bold,
                       screenWidth > 360 ? 16 : 14, blue),
                   const SizedBox(height: 16),
-                  staffAsyncValue.when(
-                    data: (staffList) {
-                      if (staffList.isEmpty) {
+                  offerProvider.when(
+                    data: (data) {
+                      if (data.isEmpty) {
                         return Center(
-                          child: customTextOne(
-                              text: "No staff members found",
-                              fontweight: FontWeight.normal,
-                              fontsize: 16,
-                              textcolor: red),
-                        );
+                            child: Text('No offers available',
+                                style: TextStyle(color: black)));
                       }
-                      return SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: List.generate(staffList.length, (index) {
-                            final staff = staffList[index];
-                            return Padding(
-                                padding:
-                                    EdgeInsets.only(left: index == 0 ? 0 : 10),
-                                child: Column(
-                                  children: [
-                                    staff.imageUrl != null
-                                        ? CircleAvatar(
-                                            backgroundColor: blue,
-                                            backgroundImage:
-                                                NetworkImage(staff.imageUrl!),
-                                            radius: 40,
-                                          )
-                                        : CircleAvatar(
-                                            backgroundColor: blue,
-                                            radius: 40,
-                                            child: Icon(Icons.person,
-                                                color: white, size: 50),
-                                          ),
-                                    const SizedBox(height: 5),
-                                    customText(
-                                        staff?.username ?? 'New Stylist',
-                                        FontWeight.normal,
-                                        screenWidth > 360 ? 14 : 10,
-                                        black),
-                                  ],
-                                ));
-                          }),
+
+                      final offerImages =
+                          data.map((e) => e.offerImageUrl ?? '').toList();
+
+                      return CarouselSlider(
+                        options: CarouselOptions(
+                          height: 180,
+                          autoPlay: true,
+                          enlargeCenterPage: true,
+                          viewportFraction: 1.0,
+                          autoPlayInterval: Duration(seconds: 3),
+                          autoPlayAnimationDuration:
+                              Duration(milliseconds: 800),
+                          autoPlayCurve: Curves.fastOutSlowIn,
                         ),
+                        items: offerImages.map((imagePath) {
+                          return Builder(
+                            builder: (context) {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Image.network(
+                                  imagePath,
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                ),
+                              );
+                            },
+                          );
+                        }).toList(),
                       );
                     },
                     loading: () => Shimmer.fromColors(
                       baseColor: Colors.grey.withOpacity(.2),
                       highlightColor: Colors.white.withOpacity(.6),
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: List.generate(8, (index) {
-                            return Padding(
-                                padding:
-                                    EdgeInsets.only(left: index == 0 ? 0 : 10),
-                                child: CircleAvatar(
-                                  backgroundColor: grey.withOpacity(.5),
-                                  radius: 40,
-                                ));
-                          }),
+                      child: Container(
+                        height: 180,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: grey.withOpacity(.5),
                         ),
                       ),
                     ),
-                    error: (error, stack) => Center(
-                        child: Text(
-                      "Error: $error",
-                      style: const TextStyle(color: Colors.red),
-                    )),
-                  ),
+                    error: (error, _) => Center(
+                      child: Text(error.toString(),
+                          style: const TextStyle(color: Colors.red)),
+                    ),
+                  )
                 ],
               ),
             )

@@ -9,7 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:intl/intl.dart'; // To format time in AM/PM format
 
-class BarberListScreen extends ConsumerWidget {
+class BarberListScreen extends ConsumerStatefulWidget {
   final String serviceId;
   final String serviceName;
   final String servicePrice;
@@ -21,6 +21,20 @@ class BarberListScreen extends ConsumerWidget {
     super.key,
   });
 
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _BarberListScreenState();
+}
+
+class _BarberListScreenState extends ConsumerState<BarberListScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      ref.invalidate(barberListProvider(widget.serviceName));
+    });
+  }
+
   // Helper function to convert 24-hour format time to 12-hour format with AM/PM
   String convertToAMPM(String time24) {
     final format = DateFormat("hh:mm a"); // 12-hour format with AM/PM
@@ -29,9 +43,9 @@ class BarberListScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    final barberListAsync = ref.watch(barberListProvider(serviceName));
+    final barberListAsync = ref.watch(barberListProvider(widget.serviceName));
 
     return Scaffold(
       backgroundColor: background,
@@ -39,6 +53,31 @@ class BarberListScreen extends ConsumerWidget {
         backgroundColor: background,
         elevation: 0,
         foregroundColor: black,
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: red,
+        child: Icon(
+          Icons.refresh,
+          color: white,
+        ),
+        onPressed: () {
+          try {
+            ref.invalidate(barberListProvider(widget.serviceName));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                backgroundColor: background,
+                content: Text(
+                  'Refresh successfully',
+                  style: TextStyle(color: red),
+                )));
+          } catch (e) {
+            SnackBar(
+                backgroundColor: Colors.red,
+                content: Text(
+                  'Refresh Field',
+                  style: TextStyle(color: white),
+                ));
+          }
+        },
       ),
       body: barberListAsync.when(
         data: (barbers) {
@@ -55,6 +94,8 @@ class BarberListScreen extends ConsumerWidget {
             itemCount: barbers.length,
             itemBuilder: (context, index) {
               final barber = barbers[index];
+
+              log('availableSlot ${barber['availableSlot']}');
               final workingHours = barber['workingHours'];
               final startTime = workingHours != null
                   ? convertToAMPM(workingHours['start']!)
@@ -133,10 +174,11 @@ class BarberListScreen extends ConsumerWidget {
                               builder: (context) => BookAppointmentScreen(
                                 barberId: barber['id']!,
                                 barberName: barber['name']!,
-                                serviceId: serviceId,
+                                serviceId: widget.serviceId,
                                 barberImage: barber['imageUrl']!,
-                                serviceName: serviceName,
-                                servicePrice: servicePrice,
+                                serviceName: widget.serviceName,
+                                servicePrice: widget.servicePrice,
+                                availableSlot: barber['availableSlot'],
                               ),
                             ),
                           );

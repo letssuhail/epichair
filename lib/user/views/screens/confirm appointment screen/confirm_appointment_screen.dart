@@ -146,15 +146,6 @@ class ConfirmAppointmentScreen extends ConsumerWidget {
                     ),
                   ),
                 ),
-
-                // Name centered on top of the image
-                Positioned.fill(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: customText(barberName, FontWeight.normal,
-                        screenWidth > 360 ? 15 : 10, white),
-                  ),
-                ),
               ],
             ),
             SizedBox(height: 10),

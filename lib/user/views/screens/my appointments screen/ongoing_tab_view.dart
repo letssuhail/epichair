@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:epic/user/providers/appointmentGet_provider.dart';
 import 'package:epic/user/providers/appointment_update_provider.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +47,10 @@ class _OnGoingTabViewState extends ConsumerState<OnGoingTabView> {
             shrinkWrap: true,
             itemBuilder: (context, index) {
               final appointment = ongoingAppointments[index];
+              log('appointment: $appointment');
               final appointmentId = appointment['_id'];
+              final appointmentCreatedAt = appointment['createdAt'];
+              log('appointmentCreatedAt: ${appointmentCreatedAt.toString()}');
               final appointmentPrice = appointment['service']['price'];
               final serviceId = appointment['service']['_id'];
               String getOrdinalSuffix(int day) {
@@ -202,7 +207,8 @@ class _OnGoingTabViewState extends ConsumerState<OnGoingTabView> {
                                             serviceId,
                                             false,
                                             appointmentDate,
-                                            appointment['appointmentTime']!);
+                                            appointment['appointmentTime']!,
+                                            appointmentCreatedAt);
                                       },
                                       backgroundcolor: blue,
                                       text: 'Cancel',
@@ -382,13 +388,19 @@ TimeOfDay _roundToNearestQuarter(TimeOfDay time) {
 
 // Dialog for Cancel Confirmation
 Future<void> _showConfirmationDialog(
-    BuildContext context,
-    WidgetRef ref,
-    String appointmentId,
-    String serviceId,
-    bool isConfirm,
-    DateTime appointmentDate,
-    String appointmentTime) async {
+  BuildContext context,
+  WidgetRef ref,
+  String appointmentId,
+  String serviceId,
+  bool isConfirm,
+  DateTime appointmentDate,
+  String appointmentTime,
+  String appointmentCreatedAt,
+) async {
+  final createdAt = DateTime.parse(appointmentCreatedAt);
+  final now = DateTime.now();
+  final differenceInMinutes = now.difference(createdAt).inMinutes;
+
   showDialog<void>(
     context: context,
     builder: (BuildContext context) {
@@ -396,20 +408,15 @@ Future<void> _showConfirmationDialog(
       return AlertDialog(
         backgroundColor: background,
         title: Text(
-          'Cancel Appointment',
+          isConfirm ? 'Confirm Appointment' : 'Cancel Appointment',
           style: TextStyle(color: red, fontSize: screenWidth > 360 ? 18 : 14),
         ),
-        content: isConfirm
-            ? Text(
-                'Are you sure you want to confirm this appointment?',
-                style: TextStyle(
-                    color: red, fontSize: screenWidth > 360 ? 16 : 12),
-              )
-            : Text(
-                'Are you sure you want to cancel this appointment?',
-                style: TextStyle(
-                    color: red, fontSize: screenWidth > 360 ? 16 : 12),
-              ),
+        content: Text(
+          isConfirm
+              ? 'Are you sure you want to confirm this appointment?'
+              : 'Are you sure you want to cancel this appointment?',
+          style: TextStyle(color: red, fontSize: screenWidth > 360 ? 16 : 12),
+        ),
         actions: <Widget>[
           TextButton(
             child: Text('No',
@@ -424,20 +431,31 @@ Future<void> _showConfirmationDialog(
                 style: TextStyle(
                     color: red, fontSize: screenWidth > 360 ? 16 : 12)),
             onPressed: () {
-              ref
-                  .read(appointmentUpdateProvider.notifier)
-                  .updateAppointment(
+              if (!isConfirm && differenceInMinutes < 30) {
+                final remainingMinutes = 30 - differenceInMinutes;
+                Navigator.of(context).pop(); // close dialog
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      content: Text(
+                          'Wait to Cancel\nAppointment $remainingMinutes Can be cancelled after minutes.')),
+                );
+              } else {
+                ref
+                    .read(appointmentUpdateProvider.notifier)
+                    .updateAppointment(
                       id: appointmentId,
                       service: serviceId,
                       appointmentDate: appointmentDate.toIso8601String(),
                       appointmentTime: appointmentTime,
-                      status: isConfirm ? 'confirmed' : 'cancelled')
-                  .then((success) {
-                if (success) {
-                  ref.invalidate(appointmentsProvider);
-                }
-              });
-              Navigator.of(context).pop();
+                      status: isConfirm ? 'confirmed' : 'cancelled',
+                    )
+                    .then((success) {
+                  if (success) {
+                    ref.invalidate(appointmentsProvider);
+                  }
+                });
+                Navigator.of(context).pop();
+              }
             },
           ),
         ],

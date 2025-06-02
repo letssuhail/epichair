@@ -19,12 +19,13 @@ final barberListProvider =
       },
     );
 
-    log('response body: ${response.body}');
+    log('response barberlist: ${response.body}');
+    log('response statuscode: ${response.statusCode}');
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       final staffModel = StaffModel.fromJson(data);
-      final staffMembers = staffModel.staffMembers ?? [];
+      final staffMembers = staffModel.staffWithSlots ?? [];
 
       List<Map<String, dynamic>> filteredStaff = [];
 
@@ -38,6 +39,17 @@ final barberListProvider =
             'imageUrl': staff.imageUrl ??
                 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9nHrLn6HQN45iNAfQ2DXKp5nTyosP_2xxR8JDlZNwqgqfHnAjJys4oGh6_PWxP0RbtbY&usqp=CAU',
             'isOnHoliday': staff.isOnHoliday ?? false,
+            'availableSlot': (staff.availableSlots ?? [])
+                .map((slot) => {
+                      "date": slot.date?.toIso8601String(),
+                      "slots": (slot.slots ?? [])
+                          .map((s) => {
+                                "time": s.time,
+                                "available": s.available,
+                              })
+                          .toList(),
+                    })
+                .toList(),
             'workingHours': {
               'start': staff.workingHours?.start ?? 'N/A',
               'end': staff.workingHours?.end ?? 'N/A',
