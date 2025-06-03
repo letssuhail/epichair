@@ -90,7 +90,7 @@ class StaffApiService {
         log(response.body);
         final data = json.decode(response.body);
 
-        return data['staffMembers']; // Return the list of staff members
+        return data['staffWithSlots']; // Return the list of staff members
       } else {
         print('Failed to fetch staff information: ${response.statusCode}');
         return null;

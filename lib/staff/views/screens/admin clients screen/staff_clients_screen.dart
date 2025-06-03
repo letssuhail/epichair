@@ -89,8 +89,10 @@ class _StaffClientsScreenState extends ConsumerState<StaffClientsScreen> {
                           final clientData = uniqueClients[index];
                           log(clientData.toString());
                           return avatarWidget(
-                              imagePath: clientData['user']['image_url'],
-                              name: clientData['user']['username'],
+                              imagePath: clientData['user']['image_url'] ??
+                                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9nHrLn6HQN45iNAfQ2DXKp5nTyosP_2xxR8JDlZNwqgqfHnAjJys4oGh6_PWxP0RbtbY&usqp=CAU',
+                              name:
+                                  clientData['user']['username'] ?? 'new user',
                               context: context);
                         },
                       );
