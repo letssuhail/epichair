@@ -445,7 +445,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
   void _onDateSelected(DateTime date) {
     setState(() {
       _selectedDate = date;
-      _selectedTimeSlot = null; // Reset time slot when date changes
+      _selectedTimeSlot = null;
     });
   }
 

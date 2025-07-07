@@ -30,8 +30,8 @@ class MyAppointmentsScreen extends ConsumerWidget {
             fontsize: screenWidth > 360 ? 16 : 12,
             textcolor: black,
           ),
-          backgroundColor: background, // Makes AppBar background transparent
-          elevation: 0, // Removes the AppBar shadow
+          backgroundColor: background,
+          elevation: 0,
         ),
         floatingActionButton: FloatingActionButton(
           backgroundColor: red,

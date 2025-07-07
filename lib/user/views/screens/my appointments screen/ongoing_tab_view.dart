@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:epic/user/providers/appointmentGet_provider.dart';
 import 'package:epic/user/providers/appointment_update_provider.dart';
+import 'package:epic/user/utils/navigator_function.dart';
+import 'package:epic/user/views/screens/my%20appointments%20screen/available_time_slots.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -52,6 +54,8 @@ class _OnGoingTabViewState extends ConsumerState<OnGoingTabView> {
               final appointmentCreatedAt = appointment['createdAt'];
               log('appointmentCreatedAt: ${appointmentCreatedAt.toString()}');
               final appointmentPrice = appointment['service']['price'];
+              final appointmentServiceName = appointment['service']['name'];
+              final appointmentBarberName = appointment['barber']['username'];
               final serviceId = appointment['service']['_id'];
               String getOrdinalSuffix(int day) {
                 if (day >= 11 && day <= 13) return '${day}th';
@@ -179,8 +183,18 @@ class _OnGoingTabViewState extends ConsumerState<OnGoingTabView> {
                                     height: 35,
                                     child: customButton(
                                       ontap: () {
-                                        _showRescheduleDialog(context, ref,
-                                            appointmentId, serviceId);
+                                        pushScreenTo(
+                                            context,
+                                            AvailableTimeSlots(
+                                              appointmentId: appointmentId,
+                                              serviceId: serviceId,
+                                              appointmentBarberName:
+                                                  appointmentBarberName,
+                                              serviceName:
+                                                  appointmentServiceName,
+                                            ));
+                                        // _showRescheduleDialog(context, ref,
+                                        //     appointmentId, serviceId);
                                       },
                                       backgroundcolor: newGrey,
                                       text: 'Reschedule',
