@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:epic/user/api%20services/appointment_api.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:epic/consts/const.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -85,6 +84,11 @@ class AppointmentService {
   }) async {
     const apiUrl = 'https://epichair.vercel.app/api/user/appointment';
     final token = await getToken();
+    // log('_id: $id');
+    // log('service: $service');
+    // log('appointmentDate: $appointmentDate');
+    // log('appointmentTime: $appointmentTime');
+    // log('status: $status');
     try {
       final response = await http.put(
         Uri.parse(apiUrl),

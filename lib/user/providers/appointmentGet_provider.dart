@@ -1,10 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:epic/user/api%20services/appointment_api.dart'; // Replace with your actual API service import
+import 'package:epic/user/api%20services/appointment_api.dart';
 
 final appointmentsProvider =
     FutureProvider<Map<String, List<Map<String, dynamic>>>>((ref) async {
-  final appointmentService =
-      AppointmentService(); // Replace with your actual appointment service
+  final appointmentService = AppointmentService();
   final appointments = await appointmentService.getAppointments();
 
   if (appointments == null) {

@@ -72,7 +72,8 @@ class _AvailableTimeSlotsState extends ConsumerState<AvailableTimeSlots> {
                   final minute = int.parse(timeParts[1]);
 
                   final formattedTime =
-                      TimeOfDay(hour: hour, minute: minute).format(context);
+                      '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
+
                   final formattedDate =
                       DateTime.parse(selectedDate!).toString().substring(0, 10);
 
