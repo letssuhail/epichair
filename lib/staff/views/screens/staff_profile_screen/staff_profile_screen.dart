@@ -1087,12 +1087,63 @@ class _StaffProfileScreenState extends ConsumerState<StaffProfileScreen> {
     setState(() => _isLoading = false);
   }
 
+  Future<void> _showLogoutConfirmationDialog(
+      BuildContext context, WidgetRef ref) async {
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        double screenWidth = MediaQuery.of(context).size.width;
+        return AlertDialog(
+          backgroundColor: background,
+          title: Text(
+            'Logout',
+            style: TextStyle(
+              color: black,
+              fontSize: screenWidth > 360 ? 18 : 14,
+            ),
+          ),
+          content: Text(
+            'Are you sure you want to log out?',
+            style:
+                TextStyle(color: black, fontSize: screenWidth > 360 ? 16 : 12),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel',
+                  style: TextStyle(
+                      color: black, fontSize: screenWidth > 360 ? 16 : 12)),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              child: Text('Yes',
+                  style: TextStyle(
+                      color: black, fontSize: screenWidth > 360 ? 16 : 12)),
+              onPressed: () async {
+                ref.read(logoutProvider.notifier).logout(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScaffoldMessenger(
       key: _scaffoldMessengerKey,
       child: Scaffold(
-        appBar: AppBar(title: const Text('Profile')),
+        appBar: AppBar(
+          title: const Text('Profile'),
+          actions: [
+            IconButton(
+              onPressed: () {
+                _showLogoutConfirmationDialog(context, ref);
+              },
+              icon: Icon(Icons.logout, color: black),
+            ),
+          ],
+        ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: SingleChildScrollView(

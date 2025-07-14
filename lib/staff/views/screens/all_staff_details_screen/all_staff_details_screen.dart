@@ -114,7 +114,7 @@ class AllStaffDetailsScreen extends ConsumerWidget {
                                 fontsize: screenWidth > 360 ? 18 : 12,
                                 textcolor: black),
                             customTextOne(
-                                text: 'Email: ${staff.phoneNumber}"',
+                                text: 'Phone: ${staff.phoneNumber}',
                                 fontweight: FontWeight.bold,
                                 fontsize: screenWidth > 360 ? 16 : 10,
                                 textcolor: black),
